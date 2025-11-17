@@ -1,0 +1,44 @@
+<configuration>
+
+    <!-- Variablen -->
+    <property name="LOG_DIR" value="target/logs"/>
+    <property name="LOG_FILE" value="${LOG_DIR}/tests.log"/>
+
+    <!-- Console Appender -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- Zeit | Level | Thread | Logger | Message -->
+            <pattern>%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Rolling File Appender -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Tägliche Rotation + historisch 7 Tage -->
+            <fileNamePattern>${LOG_DIR}/tests-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Dein Paket: mehr Details -->
+    <logger name="com.example" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+        <logger name="com.microsoft.playwright" level="WARN"/>
+        <logger name="org.testng" level="WARN"/>
+    </logger>
+
+    <!-- Root-Logger: eher ruhig halten -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>
