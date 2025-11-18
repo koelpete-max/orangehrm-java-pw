@@ -1,0 +1,10 @@
+{
+  "Admin": {
+    "username": "Admin",
+    "password": "I$!mAD0ctor"
+  },
+  "employee": {
+    "username": "john",
+    "password": "123456"
+  }
+}

@@ -4,13 +4,15 @@ import com.example.base.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class HomePageTests extends BaseTest
-{
-
+public class HomePageTest extends BaseTest {
     @Test
-    public void VerifyHomePageTitleTest() {
-        page.navigate("http://localhost:9080/");
+    public void VerifyHomePageTest() {
+        tlog.step("Verifying Home Page Test");
+        navigateToHomePage(baseUrl);
 
-        Assert.assertEquals(page.title(), "OrangeHRM");
+        tlog.step("Asserting that the page is loaded");
+        Assert.assertTrue(homePage.isPageReady(), "");
+
+        tlog.step("Home Page is successfully loaded");
     }
 }

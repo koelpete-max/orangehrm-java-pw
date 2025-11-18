@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="PlaywrightSuite" parallel="classes" thread-count="5">
+    <test name="UI Tests">
+        <classes>
+            <class name="com.example.tests.HomePageTest"/>
+            <class name="com.example.tests.LoginTest"/>
+            <class name="com.example.tests.AdminPageTest"/>
+            <class name="com.example.tests.PimPageTest"/>
+            <class name="com.example.tests.DashboardPageTest"/>
+        </classes>
+    </test>
+</suite>

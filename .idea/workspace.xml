@@ -1,5 +1,353 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5c1c0855-49dc-4bd4-8d8d-b23c957fac66" name="Changes" comment="ª">
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/pages/home/HomePageLocators.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/pages/login/LoginPageLocators.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/pages/main/admin/AdminPageLocators.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/pages/main/pim/PimPageLocators.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/base/BaseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/base/BaseTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/core/TestContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/core/TestContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/di/PageModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/di/PageModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/di/TestComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/di/TestComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/pages/home/HomePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/pages/home/HomePage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/pages/login/LoginPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/pages/login/LoginPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/pages/main/SidePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/pages/main/SidePanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/pages/main/SidePanelItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/pages/main/SidePanelItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/pages/main/TopbarPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/pages/main/TopbarPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/pages/main/TopbarPanelText.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/pages/main/TopbarPanelText.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/pages/main/admin/AdminPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/pages/main/admin/AdminPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/pages/main/admin/UserRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/pages/main/admin/UserRole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/pages/main/dashboard/DashboardPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/pages/main/dashboard/DashboardPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/pages/main/pim/EmployeeData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/pages/main/pim/EmployeeData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/pages/main/pim/PimPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/pages/main/pim/PimPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/reporting/TestLogger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/reporting/TestLogger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/tests/AdminPageTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/tests/AdminPageTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/tests/DashboardPageTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/tests/DashboardPageTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/tests/HomePageTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/tests/HomePageTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/tests/LoginTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/tests/LoginTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/tests/PimPageTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/tests/PimPageTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/tests/RawLoginTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/tests/RawLoginTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/utils/ExtentManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/utils/ExtentManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/utils/ScreenShotUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/utils/ScreenShotUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/utils/TestConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/example/utils/TestConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/config/test-config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/config/test-config.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/config/test-users.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/config/test-users.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;koelpete-max&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/koelpete-max/orangehrm-java-pw.git&quot;,
+    &quot;accountId&quot;: &quot;c0dadc54-e7f9-4f3b-b49e-21eea28866a5&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/testng.xml" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="35Q6Tm9RDNwg3S1ZKGlJGZ2d0x7" />
-  <component name="PropertiesComponent">{}</component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.FirstTest.executor": "Run",
+    "Application.LoginTest.executor": "Run",
+    "JUnit.HomePageTest.executor": "Run",
+    "JUnit.HomePageTest.homePageHasCorrectTitle.executor": "Run",
+    "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
+    "Maven.playwright-java-sample [clean].executor": "Run",
+    "Maven.playwright-java-sample [compile].executor": "Run",
+    "Maven.playwright-java-sample [deploy].executor": "Run",
+    "Maven.playwright-java-sample [site].executor": "Run",
+    "Maven.playwright-java-sample [test].executor": "Run",
+    "Maven.playwright-java-sample [validate].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "TestNG.AdminPageTest.executor": "Run",
+    "TestNG.AdminPageTest.verifyAdminPageTest.executor": "Run",
+    "TestNG.AdminPageTest.verifyUserRolesTest.executor": "Run",
+    "TestNG.FirstTest.VerifyHomePageTitleTest.executor": "Run",
+    "TestNG.FirstTest.executor": "Run",
+    "TestNG.HomePageTest.VerifyHomePageTest.executor": "Run",
+    "TestNG.HomePageTest.VerifyHomePageTitleTest.executor": "Run",
+    "TestNG.HomePageTest.executor": "Run",
+    "TestNG.HomePageTests.executor": "Run",
+    "TestNG.LoginTest.ValidLoginTest.executor": "Run",
+    "TestNG.LoginTest.executor": "Run",
+    "TestNG.LoginTest.invalidCredentialsShouldNotAllowUserToAccessTheSystemTest.executor": "Run",
+    "TestNG.LoginTest.invalidLoginShouldNotWork.executor": "Run",
+    "TestNG.LoginTest.loginTest.executor": "Run",
+    "TestNG.LoginTest.validCredentialsShouldGrantUserAccessToTheSystemTest.executor": "Run",
+    "TestNG.LoginTest.validLoginShouldWork.executor": "Run",
+    "TestNG.PimPageTest.employeeInformationTest (1).executor": "Run",
+    "TestNG.PimPageTest.employeeInformationTest.executor": "Run",
+    "TestNG.PimPageTest.executor": "Run",
+    "git-widget-placeholder": "develop",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/freyrep/Library/CloudStorage/OneDrive-Personal/Learning/Playwright/java/orangeHRM",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "XML"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test/java/com/example" />
+      <recent name="$PROJECT_DIR$/src/test/java/com/example/tests" />
+    </key>
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="com.example.pages.home" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.example.di" />
+    </key>
+  </component>
+  <component name="RunManager" selected="TestNG.PimPageTest">
+    <configuration name="AdminPageTest" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="orangeHRM" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.tests" />
+      <option name="MAIN_CLASS_NAME" value="com.example.tests.AdminPageTest" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HomePageTest" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="orangeHRM" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.tests" />
+      <option name="MAIN_CLASS_NAME" value="com.example.tests.HomePageTest" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HomePageTest.VerifyHomePageTest" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="orangeHRM" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.tests" />
+      <option name="MAIN_CLASS_NAME" value="com.example.tests.HomePageTest" />
+      <option name="METHOD_NAME" value="VerifyHomePageTest" />
+      <option name="TEST_OBJECT" value="METHOD" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PimPageTest" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="orangeHRM" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.tests" />
+      <option name="MAIN_CLASS_NAME" value="com.example.tests.PimPageTest" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PimPageTest.employeeInformationTest" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="orangeHRM" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.tests" />
+      <option name="MAIN_CLASS_NAME" value="com.example.tests.PimPageTest" />
+      <option name="METHOD_NAME" value="employeeInformationTest" />
+      <option name="TEST_OBJECT" value="METHOD" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="TestNG.PimPageTest" />
+        <item itemvalue="TestNG.PimPageTest.employeeInformationTest" />
+        <item itemvalue="TestNG.AdminPageTest" />
+        <item itemvalue="TestNG.HomePageTest" />
+        <item itemvalue="TestNG.HomePageTest.VerifyHomePageTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26199.169" />
+        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-IU-252.26199.169" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5c1c0855-49dc-4bd4-8d8d-b23c957fac66" name="Changes" comment="" />
+      <created>1763029957418</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1763029957418</updated>
+      <workItem from="1763417241509" duration="1069000" />
+      <workItem from="1763450351881" duration="21000" />
+      <workItem from="1763450379772" duration="1142000" />
+      <workItem from="1763451532787" duration="11511000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/com/example/pages/login/LoginPage.java</url>
+          <line>55</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/com/example/tests/LoginTest.java</url>
+          <line>13</line>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/com/example/tests/AdminPageTest.java</url>
+          <line>25</line>
+          <option name="timeStamp" value="49" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/com/example/tests/AdminPageTest.java</url>
+          <line>15</line>
+          <option name="timeStamp" value="50" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/com/example/tests/PimPageTest.java</url>
+          <line>47</line>
+          <option name="timeStamp" value="55" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/com/example/pages/main/pim/PimPage.java</url>
+          <line>69</line>
+          <option name="timeStamp" value="57" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/com/example/di/PageModule.java</url>
+          <line>15</line>
+          <option name="timeStamp" value="59" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/com/example/pages/home/HomePage.java</url>
+          <line>39</line>
+          <option name="timeStamp" value="60" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/com/example/pages/main/pim/PimPage.java</url>
+          <line>37</line>
+          <option name="timeStamp" value="61" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/com/example/pages/main/pim/PimPage.java</url>
+          <line>59</line>
+          <option name="timeStamp" value="62" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
 </project>

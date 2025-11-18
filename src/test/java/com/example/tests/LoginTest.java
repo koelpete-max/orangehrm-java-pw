@@ -1,4 +1,62 @@
 package com.example.tests;
 
-public class LoginTest {
+import com.example.base.BaseTest;
+import com.example.pages.main.SidePanelItem;
+import com.example.pages.main.TopbarPanelText;
+import lombok.extern.slf4j.Slf4j;
+import org.testng.Assert;
+import org.testng.SkipException;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+@Slf4j
+public class LoginTest extends BaseTest {
+    @BeforeMethod
+    public void startPage() {
+        navigateToHomePage(baseUrl);
+    }
+
+    @Test
+    public void validCredentialsShouldGrantUserAccessToTheSystemTest() {
+        tlog.step("Checking login with valid credentials");
+        loginPage.login(defaultTestUser.username(), defaultTestUser.password());
+
+        tlog.step("Asserting that user is logged in");
+        Assert.assertEquals(topbarPanel.getPanelText(), TopbarPanelText.DASHBOARD.toString());
+        Assert.assertEquals(sidePanel.getMenuActiveItemName(), SidePanelItem.DASHBOARD.toString());
+
+        tlog.step("User is logged in");
+    }
+
+    @Test
+    public void invalidCredentialsShouldNotAllowUserToAccessTheSystemTest() {
+        tlog.step("Login with invalid username and password");
+        loginPage.login(defaultTestUser.username(), "******");
+
+        tlog.step("Asserting that user is NOT logged in");
+        Assert.assertTrue(loginPage.isInvalidCredentialsMessageVisible(),
+                "Failed to prevent user to log in with invalid username and password");
+
+        tlog.step("User could NOT log in");
+    }
+
+    @Test
+    public void loginTestShouldBeSkipped() {
+        test.skip("Skipping login test 3");
+        throw new SkipException("Skipping this test");
+    }
+
+    @Test
+    public void loginTestShouldFail() {
+        tlog.step("Login with invalid username and password");
+        loginPage.addUsername(defaultTestUser.username());
+        loginPage.addPassword(defaultTestUser.password());
+
+        page.setDefaultTimeout(3000);
+        tlog.step("Asserting that user is NOT logged in");
+        Assert.assertTrue(loginPage.isInvalidCredentialsMessageVisible(),
+                "Failed to prevent user to log in with invalid username and password");
+
+        tlog.step("User could NOT log in");
+    }
 }
