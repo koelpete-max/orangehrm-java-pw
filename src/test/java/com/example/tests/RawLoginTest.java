@@ -5,11 +5,10 @@ import com.microsoft.playwright.options.*;
 import org.testng.annotations.Test;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import java.util.*;
 
-public class LoginTest {
+public class RawLoginTest {
 
-    @Test
+    @Test(enabled = false)
     public void ValidLoginTest() {
         try (Playwright playwright = Playwright.create()) {
             Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions()

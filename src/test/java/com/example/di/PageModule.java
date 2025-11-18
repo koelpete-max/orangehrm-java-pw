@@ -1,12 +1,16 @@
-package com.example.modules;
+package com.example.di;
 
 import com.example.core.TestContext;
-import com.example.pages.dashboard.DashboardPage;
+import com.example.pages.main.dashboard.DashboardPage;
 import com.example.pages.home.HomePage;
 import com.example.pages.login.LoginPage;
 import com.example.pages.main.admin.AdminPage;
-import com.example.pages.pim.PimPage;
+import com.example.pages.main.pim.PimPage;
 import dagger.Provides;
+import dagger.Module;
+
+// writing this code was a lot easier than writing the same code in the
+// Testing code with me
 
 @Module
 public class PageModule {

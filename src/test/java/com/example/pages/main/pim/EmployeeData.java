@@ -1,19 +1,25 @@
-package com.example.pages.pim;
+package com.example.pages.main.pim;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
 @Getter
-@Setter
 @Slf4j
 public class EmployeeData {
-    private String id;
-    private String firstMiddleName;
-    private String lastName;
-    private String jobTitle;
+
+    private final String id;
+    private final String firstMiddleName;
+    private final String lastName;
+    private final String jobTitle;
+
+    public EmployeeData(String id, String firstMiddleName, String lastName, String jobTitle) {
+        this.id = id;
+        this.firstMiddleName = firstMiddleName;
+        this.lastName = lastName;
+        this.jobTitle = jobTitle;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -31,27 +37,22 @@ public class EmployeeData {
         EmployeeData that = (EmployeeData) o;
 
         if (!Objects.equals(id, that.id)) {
-            log.error("Employee data equals id  {} / {}", id, that.id);
+            log.error("Employee id not equal {} / {}", id, that.id);
             return false;
         }
         if (!Objects.equals(firstMiddleName.trim(), that.firstMiddleName.trim())) {
-            log.error("Employee data equals firstMiddleName {} / {}", firstMiddleName, that.firstMiddleName);
+            log.error("Employee firstMiddleName not equal {} / {}", firstMiddleName, that.firstMiddleName);
             return false;
         }
         if (!Objects.equals(lastName, that.lastName)) {
-            log.error("Employee data equals lastName  {} / {}", lastName, that.lastName);
+            log.error("Employee lastName not equal {} / {}", lastName, that.lastName);
             return false;
         }
         if (!Objects.equals(jobTitle, that.jobTitle)) {
-            log.error("Employee data equals jobTitle   {} / {}", jobTitle, that.jobTitle);
+            log.error("Employee jobTitle not equal {} / {}", jobTitle, that.jobTitle);
             return false;
         }
 
         return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, firstMiddleName, lastName, jobTitle);
     }
 }
