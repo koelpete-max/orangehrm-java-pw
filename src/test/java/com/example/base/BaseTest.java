@@ -61,7 +61,7 @@ public class BaseTest {
         browser = playwright.chromium().launch(
                 new BrowserType.LaunchOptions()
                         .setArgs(Arrays.asList("--start-maximized"))
-                        .setHeadless(true)
+                        .setHeadless(false)
         );
         page = browser.newPage();
 
@@ -81,9 +81,9 @@ public class BaseTest {
 
 //        baseUrl = TestConfig.get("BASE_URL");
         baseUrl = System.getenv("BASE_URL");
-        baseUrl = (baseUrl == null || baseUrl.isBlank()) ? TestConfig.get("BASE_URL") : baseUrl;
+//        baseUrl = (baseUrl == null || baseUrl.isBlank()) ? TestConfig.get("BASE_URL") : baseUrl;
         if (baseUrl == null || baseUrl.isBlank()) {
-            throw new IllegalStateException("BASEURL is not set");
+            throw new IllegalStateException("BASE_URL is not set");
         }
         setDefaultTestUser();
 

@@ -42,6 +42,7 @@ services:
 ui_tests:
   stage: test
   script:
+    - echo "BASE_URL ($BASE_URL)"
     - echo "Java version:" && java -version
     - echo "Maven version:" && mvn -v
 
