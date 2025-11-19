@@ -1,4 +1,4 @@
-image: mcr.microsoft.com/playwright/java:v1.56.0-jammy
+image: ubuntu:22.04
 
 stages:
   - test
@@ -7,6 +7,14 @@ variables:
   MAVEN_CLI_OPTS: "-B -q"
   # Base URL für deine Tests – zeigt auf den Service-Namen "orangehrm"
   BASEURL: "http://orangehrm"
+
+before_script:
+  - apt-get update
+  - apt-get install -y openjdk-21-jdk maven curl unzip
+  - curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+  - apt-get install -y nodejs
+  - npx playwright install-deps
+  - npx playwright install
 
 cache:
   key: "maven-cache"
