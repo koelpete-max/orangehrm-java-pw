@@ -93,14 +93,11 @@ public class BaseTest {
     public void tearDown(ITestResult result) {
         if (result.getStatus() == ITestResult.FAILURE) {
             test.fail(result.getThrowable());
-            String screenshotPath = ScreenShotUtil.takeScreenShot(page, result.getName());
-            log.info("**** screenshot path: {}", screenshotPath);
-            var absolutePath = System.getProperty("user.dir")+"/"+screenshotPath;
-            log.info("++++ absolute path: {}", absolutePath);
-            test.addScreenCaptureFromPath(absolutePath, "screenshot");
+            takeScreenshot(result);
         } else if (result.getStatus() == ITestResult.SUCCESS) {
             test.pass("Test PASSED");
         } else {
+            takeScreenshot(result);
             test.skip("Test SKIPPED");
         }
         extent.flush();
@@ -114,6 +111,14 @@ public class BaseTest {
             log.info("Closing Playwright");
             playwright.close();
         }
+    }
+
+    private void takeScreenshot(ITestResult result) {
+        String screenshotPath = ScreenShotUtil.takeScreenShot(page, result.getName());
+        log.info("**** screenshot path: {}", screenshotPath);
+        var absolutePath = System.getProperty("user.dir")+"/"+screenshotPath;
+        log.info("++++ absolute path: {}", absolutePath);
+        test.addScreenCaptureFromPath(absolutePath, "screenshot");
     }
 
     protected void navigateToHomePage(String url) {
