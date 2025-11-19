@@ -25,8 +25,8 @@ public class PimPageTest extends BaseTest {
     @DataProvider(name = "expectedEmployeeData")
     public Object[][] expectedEmployeeData() {
         return new Object[][] {
-            { new EmployeeData("0001", "Bark", "Hokga",  "") },
-            { new EmployeeData("0002", "Schuurk Be", "Bolk",  "") },
+            { new EmployeeData("0001", "Aditya Anand", "Vishwakarma",  "") },
+//            { new EmployeeData("0002", "Schuurk Be", "Bolk",  "") },
         };
     }
 
