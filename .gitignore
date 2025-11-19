@@ -13,8 +13,8 @@ target/
 *.iws
 *.iml
 *.ipr
-test-output/ExtentReport.html
-test-output/screenshots/*
+test-output/
+test-results/
 
 ### Eclipse ###
 .apt_generated
