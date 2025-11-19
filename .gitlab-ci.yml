@@ -5,7 +5,7 @@ stages:
 
 variables:
   MAVEN_CLI_OPTS: "-B -q"
-  BASEURL: "http://orangehrm"
+  BASEU_RL: "http://orangehrm"
 
 before_script:
   - apt-get update
@@ -59,7 +59,7 @@ ui_tests:
     - echo "Warte auf OrangeHRM..."
     - |
       for i in $(seq 1 40); do
-        if curl -sSf "$BASEURL" >/dev/null 2>&1; then
+        if curl -sSf "$BASE_URL" >/dev/null 2>&1; then
           echo "OrangeHRM ist erreichbar."
           break
         fi
