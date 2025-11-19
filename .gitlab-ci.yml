@@ -14,13 +14,12 @@ cache:
 
 ui_tests:
   stage: test
-#  tags: []
   script:
     - echo "Java version:"
     - java -version
     - echo "Maven version:"
     - mvn -v
-
+     - mvn -q exec:java -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install-deps"
     - mvn $MAVEN_CLI_OPTS clean test -Dsurefire.suiteXmlFiles=testng.xml
   artifacts:
     when: always
