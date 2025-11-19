@@ -27,6 +27,7 @@ import org.testng.annotations.BeforeMethod;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 @Slf4j
@@ -115,14 +116,18 @@ public class BaseTest {
 
     private void takeScreenshot(ITestResult result) {
         String screenshotPath = ScreenShotUtil.takeScreenShot(page, result.getName());
+        log.info("Screenshot stored at: {}", screenshotPath);
 
-        var withAbsolutePath = System.getenv("NO_ABSOLUTE_SCREENSHOT_PATH");
-        if (withAbsolutePath == null || withAbsolutePath.equalsIgnoreCase("false")) {
-            screenshotPath = System.getProperty("user.dir") + "/" + screenshotPath;
-        }
-        log.info("**** screenshot path: {}", screenshotPath);
+        String fileName = Paths.get(screenshotPath).getFileName().toString();
+        String relativeToReport = "screenshots/" + fileName;
 
-        test.addScreenCaptureFromPath(screenshotPath, "screenshot");
+//        var withAbsolutePath = System.getenv("NO_ABSOLUTE_SCREENSHOT_PATH");
+//        if (withAbsolutePath == null || withAbsolutePath.equalsIgnoreCase("false")) {
+//            screenshotPath = System.getProperty("user.dir") + "/" + screenshotPath;
+//        }
+//        log.info("**** screenshot path: {}", screenshotPath);
+
+        test.addScreenCaptureFromPath(relativeToReport, "screenshot");
     }
 
     protected void navigateToHomePage(String url) {

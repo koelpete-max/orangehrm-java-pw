@@ -80,7 +80,6 @@ ui_tests:
     paths:
       - target/surefire-reports/
       - test-output/
-      - test-results/
 
 #image: mcr.microsoft.com/playwright/java:v1.56.0-jammy
 #
