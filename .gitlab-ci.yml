@@ -86,6 +86,7 @@ stages:
   - test
 
 variables:
+  BASEU_RL: "https://opensource-demo.orangehrmlive.com/"
   MAVEN_CLI_OPTS: "-B -q"
 
 cache:

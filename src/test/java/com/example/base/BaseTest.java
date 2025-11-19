@@ -81,6 +81,7 @@ public class BaseTest {
 
 //        baseUrl = TestConfig.get("BASE_URL");
         baseUrl = System.getenv("BASE_URL");
+        baseUrl = (baseUrl == null || baseUrl.isBlank()) ? TestConfig.get("BASE_URL") : baseUrl;
         if (baseUrl == null || baseUrl.isBlank()) {
             throw new IllegalStateException("BASEURL is not set");
         }
