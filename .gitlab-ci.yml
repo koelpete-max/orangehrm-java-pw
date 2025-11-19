@@ -5,7 +5,7 @@ stages:
 
 variables:
   MAVEN_CLI_OPTS: "-B -q"
-  BASEU_RL: "http://orangehrm"
+  BASEU_URL: "http://orangehrm"
 
 before_script:
   - apt-get update
