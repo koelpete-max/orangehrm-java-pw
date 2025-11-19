@@ -37,3 +37,13 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+*.zip
+*.msi
+*.exe
+*.mp4
+*.mkv
+*.dmg
+*.pkg
+*.iso
+jdk-*.*
