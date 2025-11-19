@@ -6,6 +6,7 @@ stages:
 variables:
   MAVEN_CLI_OPTS: "-B -q"
   BASE_URL: "http://orangehrm"
+  NO_ABSOLUTE_SCREENSHOT_PATH: "true"
 
 before_script:
   - apt-get update

@@ -92,12 +92,12 @@ public class BaseTest {
     @AfterMethod
     public void tearDown(ITestResult result) {
         if (result.getStatus() == ITestResult.FAILURE) {
-            test.fail(result.getThrowable());
             takeScreenshot(result);
+            test.fail(result.getThrowable());
         } else if (result.getStatus() == ITestResult.SUCCESS) {
+            takeScreenshot(result);
             test.pass("Test PASSED");
         } else {
-            takeScreenshot(result);
             test.skip("Test SKIPPED");
         }
         extent.flush();
@@ -115,10 +115,14 @@ public class BaseTest {
 
     private void takeScreenshot(ITestResult result) {
         String screenshotPath = ScreenShotUtil.takeScreenShot(page, result.getName());
+
+        var withAbsolutePath = System.getenv("NO_ABSOLUTE_SCREENSHOT_PATH");
+        if (withAbsolutePath == null || withAbsolutePath.equalsIgnoreCase("false")) {
+            screenshotPath = System.getProperty("user.dir") + "/" + screenshotPath;
+        }
         log.info("**** screenshot path: {}", screenshotPath);
-        var absolutePath = System.getProperty("user.dir")+"/"+screenshotPath;
-        log.info("++++ absolute path: {}", absolutePath);
-        test.addScreenCaptureFromPath(absolutePath, "screenshot");
+
+        test.addScreenCaptureFromPath(screenshotPath, "screenshot");
     }
 
     protected void navigateToHomePage(String url) {
