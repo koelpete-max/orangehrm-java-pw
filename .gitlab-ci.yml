@@ -29,7 +29,7 @@ services:
       MARIADB_USER: orangeuser
       MARIADB_PASSWORD: orangepass
 
-  - name: bitnami/orangehrm:latest
+  - name: orangehrm/orangehrm:latest
     alias: orangehrm
     variables:
       MARIADB_HOST: mariadb
