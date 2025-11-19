@@ -47,7 +47,7 @@ ui_tests:
 
     - echo "Warte auf MariaDB..."
     - |
-      for i in $(seq 1 30); do
+      for i in $(seq 1 5); do
         if mysqladmin ping -h mariadb -prootpass --silent; then
           echo "MariaDB ist erreichbar."
           break
