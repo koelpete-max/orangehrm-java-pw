@@ -32,15 +32,15 @@ services:
       MARIADB_USER: orangeuser
       MARIADB_PASSWORD: orangepass
 
-  # OrangeHRM, das diese MariaDB nutzt
   - name: bitnami/orangehrm:latest
     alias: orangehrm
     variables:
-      ORANGEHRM_PASSWORD: admin123          # Admin-Passwort (Standard: bitnami)
-      MARIADB_HOST: mariadb                 # muss mit alias oben übereinstimmen
+      MARIADB_HOST: mariadb
       MARIADB_PORT: "3306"
-      MARIADB_USER: root                    # oder orangeuser – je nach Setup
-      MARIADB_PASSWORD: rootpass
+      MARIADB_USER: orangeuser
+      MARIADB_PASSWORD: orangepass
+      MARIADB_DATABASE: orangehrm
+      ORANGEHRM_PASSWORD: admin123
 
 ui_tests:
   stage: test
