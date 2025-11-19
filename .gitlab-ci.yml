@@ -24,7 +24,7 @@ cache:
 # 🔹 App- und DB-Container, die parallel zu deinem Job laufen
 services:
   # MariaDB für OrangeHRM
-  - name: bitnami/mariadb:11.3
+  - name: mariadb:11.3
     alias: mariadb
     variables:
       MARIADB_ROOT_PASSWORD: rootpass
@@ -32,7 +32,7 @@ services:
       MARIADB_USER: orangeuser
       MARIADB_PASSWORD: orangepass
 
-  - name: orangehrm:latest
+  - name: bitnami/orangehrm:latest
     alias: orangehrm
     variables:
       MARIADB_HOST: mariadb
