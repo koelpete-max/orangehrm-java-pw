@@ -5,7 +5,6 @@ stages:
 
 variables:
   MAVEN_CLI_OPTS: "-B -q"
-  # Base URL für deine Tests – zeigt auf den Service-Namen "orangehrm"
   BASEURL: "http://orangehrm"
 
 before_script:
@@ -21,9 +20,7 @@ cache:
   paths:
     - .m2/repository
 
-# 🔹 App- und DB-Container, die parallel zu deinem Job laufen
 services:
-  # MariaDB für OrangeHRM
   - name: mariadb:11.3
     alias: mariadb
     variables:
@@ -48,7 +45,6 @@ ui_tests:
     - echo "Java version:" && java -version
     - echo "Maven version:" && mvn -v
 
-    # ⏱ 1) Auf DB warten (optional, aber sehr hilfreich)
     - echo "Warte auf MariaDB..."
     - |
       for i in $(seq 1 30); do
@@ -60,7 +56,6 @@ ui_tests:
         sleep 5
       done
 
-    # ⏱ 2) Auf OrangeHRM warten
     - echo "Warte auf OrangeHRM..."
     - |
       for i in $(seq 1 40); do
@@ -72,7 +67,6 @@ ui_tests:
         sleep 5
       done
 
-    # ⏱ 3) Tests ausführen
     - mvn $MAVEN_CLI_OPTS clean test -Dsurefire.suiteXmlFiles=testng.xml
 
   artifacts:
