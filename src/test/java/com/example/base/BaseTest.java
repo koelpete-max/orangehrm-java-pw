@@ -79,9 +79,8 @@ public class BaseTest {
         test = extent.createTest(method.getName());
         tlog = new TestLogger(test);
 
-//        baseUrl = TestConfig.get("BASE_URL");
         baseUrl = System.getenv("BASE_URL");
-//        baseUrl = (baseUrl == null || baseUrl.isBlank()) ? TestConfig.get("BASE_URL") : baseUrl;
+        baseUrl = (baseUrl == null || baseUrl.isBlank()) ? TestConfig.get("BASE_URL") : baseUrl;
         if (baseUrl == null || baseUrl.isBlank()) {
             throw new IllegalStateException("BASE_URL is not set");
         }

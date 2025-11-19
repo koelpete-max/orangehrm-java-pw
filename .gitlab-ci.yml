@@ -9,7 +9,7 @@ variables:
 
 before_script:
   - apt-get update
-  - apt-get install -y openjdk-21-jdk maven curl unzip
+  - apt-get install -y openjdk-21-jdk maven curl unzip default-mysql-client
   - curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
   - apt-get install -y nodejs
   - npx playwright install-deps
