@@ -79,7 +79,11 @@ public class BaseTest {
         test = extent.createTest(method.getName());
         tlog = new TestLogger(test);
 
-        baseUrl = TestConfig.get("BASE_URL");
+//        baseUrl = TestConfig.get("BASE_URL");
+        baseUrl = System.getenv("BASE_URL");
+        if (baseUrl == null || baseUrl.isBlank()) {
+            throw new IllegalStateException("BASEURL is not set");
+        }
         setDefaultTestUser();
 
         log.info("Test '{}' started ", method.getName());
