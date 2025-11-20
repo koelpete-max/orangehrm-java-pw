@@ -62,7 +62,7 @@ public class BaseTest {
         browser = playwright.chromium().launch(
                 new BrowserType.LaunchOptions()
                         .setArgs(Arrays.asList("--start-maximized"))
-                        .setHeadless(true)
+                        .setHeadless(false)
         );
         page = browser.newPage();
 
@@ -120,12 +120,6 @@ public class BaseTest {
 
         String fileName = Paths.get(screenshotPath).getFileName().toString();
         String relativeToReport = "screenshots/" + fileName;
-
-//        var withAbsolutePath = System.getenv("NO_ABSOLUTE_SCREENSHOT_PATH");
-//        if (withAbsolutePath == null || withAbsolutePath.equalsIgnoreCase("false")) {
-//            screenshotPath = System.getProperty("user.dir") + "/" + screenshotPath;
-//        }
-//        log.info("**** screenshot path: {}", screenshotPath);
 
         test.addScreenCaptureFromPath(relativeToReport, "screenshot");
     }

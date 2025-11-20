@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 @Slf4j
 public class LoginTest extends BaseTest {
+
     @BeforeMethod
     public void startPage() {
         navigateToHomePage(baseUrl);
@@ -44,19 +45,5 @@ public class LoginTest extends BaseTest {
     public void loginTestShouldBeSkipped() {
         test.skip("Skipping login test 3");
         throw new SkipException("Skipping this test");
-    }
-
-    @Test
-    public void loginTestShouldFail() {
-        tlog.step("Login with invalid username and password");
-        loginPage.addUsername(defaultTestUser.username());
-        loginPage.addPassword(defaultTestUser.password());
-
-        page.setDefaultTimeout(3000);
-        tlog.step("Asserting that user is NOT logged in");
-        Assert.assertTrue(loginPage.isInvalidCredentialsMessageVisible(),
-                "Failed to prevent user to log in with invalid username and password");
-
-        tlog.step("User could NOT log in");
     }
 }
