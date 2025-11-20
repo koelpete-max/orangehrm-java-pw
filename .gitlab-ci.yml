@@ -22,14 +22,16 @@ cache:
     - .m2/repository
 
 services:
-  - name: mariadb:11.3
+  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-db-seeded:1.0
     alias: mariadb
     variables:
-      MARIADB_ROOT_PASSWORD: rootpass
-      MARIADB_DATABASE: orangehrm
-      MARIADB_USER: orangeuser
-      MARIADB_PASSWORD: orangepass
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: orangehrm
+      MYSQL_USER: orangeuser
+      MYSQL_PASSWORD: orangepass
 
+  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-app-configured:1.0
+    alias: orangehrm
   - name: orangehrm/orangehrm:latest
     alias: orangehrm
     variables:
