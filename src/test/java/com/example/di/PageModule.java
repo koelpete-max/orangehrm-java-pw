@@ -9,8 +9,6 @@ import com.example.pages.main.pim.PimPage;
 import dagger.Provides;
 import dagger.Module;
 
-// writing this code was a lot easier than writing the same code in the
-// Testing code with me
 
 @Module
 public class PageModule {
