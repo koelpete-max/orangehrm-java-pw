@@ -27,6 +27,7 @@ import org.testng.annotations.BeforeMethod;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 @Slf4j
@@ -61,7 +62,7 @@ public class BaseTest {
         browser = playwright.chromium().launch(
                 new BrowserType.LaunchOptions()
                         .setArgs(Arrays.asList("--start-maximized"))
-                        .setHeadless(false)
+                        .setHeadless(true)
         );
         page = browser.newPage();
 
@@ -79,7 +80,11 @@ public class BaseTest {
         test = extent.createTest(method.getName());
         tlog = new TestLogger(test);
 
-        baseUrl = TestConfig.get("BASE_URL");
+        baseUrl = System.getenv("BASE_URL");
+        baseUrl = (baseUrl == null || baseUrl.isBlank()) ? TestConfig.get("BASE_URL") : baseUrl;
+        if (baseUrl == null || baseUrl.isBlank()) {
+            throw new IllegalStateException("BASE_URL is not set");
+        }
         setDefaultTestUser();
 
         log.info("Test '{}' started ", method.getName());
@@ -88,13 +93,10 @@ public class BaseTest {
     @AfterMethod
     public void tearDown(ITestResult result) {
         if (result.getStatus() == ITestResult.FAILURE) {
+            takeScreenshot(result);
             test.fail(result.getThrowable());
-            String screenshotPath = ScreenShotUtil.takeScreenShot(page, result.getName());
-            log.info("**** screenshot path: {}", screenshotPath);
-            var absolutePath = System.getProperty("user.dir")+"/"+screenshotPath;
-            log.info("++++ absolute path: {}", absolutePath);
-            test.addScreenCaptureFromPath(absolutePath, "screenshot");
         } else if (result.getStatus() == ITestResult.SUCCESS) {
+            takeScreenshot(result);
             test.pass("Test PASSED");
         } else {
             test.skip("Test SKIPPED");
@@ -110,6 +112,16 @@ public class BaseTest {
             log.info("Closing Playwright");
             playwright.close();
         }
+    }
+
+    private void takeScreenshot(ITestResult result) {
+        String screenshotPath = ScreenShotUtil.takeScreenShot(page, result.getName());
+        log.info("Screenshot stored at: {}", screenshotPath);
+
+        String fileName = Paths.get(screenshotPath).getFileName().toString();
+        String relativeToReport = "screenshots/" + fileName;
+
+        test.addScreenCaptureFromPath(relativeToReport, "screenshot");
     }
 
     protected void navigateToHomePage(String url) {

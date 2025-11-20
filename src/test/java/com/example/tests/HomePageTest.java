@@ -11,7 +11,9 @@ public class HomePageTest extends BaseTest {
         navigateToHomePage(baseUrl);
 
         tlog.step("Asserting that the page is loaded");
-        Assert.assertTrue(homePage.isPageReady(), "");
+        Assert.assertTrue(
+                homePage.getActualPageTitle().contains(homePage.getExpectedPageTitle()),
+                "Unexpected title: " + homePage.getActualPageTitle());
 
         tlog.step("Home Page is successfully loaded");
     }

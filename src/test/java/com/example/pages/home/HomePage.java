@@ -5,6 +5,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.WaitUntilState;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.inject.Inject;
@@ -13,6 +14,7 @@ import javax.inject.Inject;
 public class HomePage {
 
     private final Page page;
+    @Getter
     private final String expectedPageTitle = "OrangeHRM";
     private final HomePageLocators homePageLocators;
     private final Locator CompanyBrandImgLocator;
@@ -36,7 +38,15 @@ public class HomePage {
         return success ? new LoginPage(page) : null;
     }
 
+    public String getActualPageTitle() {
+        return homePageLocators.getPageTitle();
+    }
+
     public boolean isPageReady() {
+        String actualTitle = homePageLocators.getPageTitle();
+        log.info("Actual title: {}", actualTitle);
+        log.info("Page URL   : {}", page.url());
+
         var isReady = homePageLocators.getPageTitle().equals(expectedPageTitle)
                 && CompanyBrandImgLocator.isVisible();
         log.info("Page ready '{}'", isReady ? "Yes" : "No");

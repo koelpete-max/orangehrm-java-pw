@@ -9,9 +9,12 @@ target/
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
+.idea/workspace.xml
 *.iws
 *.iml
 *.ipr
+test-output/
+test-results/
 
 ### Eclipse ###
 .apt_generated
@@ -37,3 +40,13 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+*.zip
+*.msi
+*.exe
+*.mp4
+*.mkv
+*.dmg
+*.pkg
+*.iso
+jdk-*.*
