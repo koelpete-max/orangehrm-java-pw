@@ -35,7 +35,7 @@ services:
 
   - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-app-configured:1.0
     alias: orangehrm
-  - name: orangehrm/orangehrm:latest
+  - name: orangehrm/orangehrm:5.7
     alias: orangehrm
     variables:
       MARIADB_HOST: mariadb
