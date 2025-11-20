@@ -45,5 +45,5 @@ public class LoginTest extends BaseTest {
     public void loginTestShouldBeSkipped() {
         test.skip("Skipping login test 3");
         throw new SkipException("Skipping this test");
-    }§
+    }
 }
