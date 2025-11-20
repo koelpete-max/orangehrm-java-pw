@@ -22,13 +22,16 @@ cache:
     - .m2/repository
 
 services:
-  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-db-seeded:1.0
+  - name: mariadb:11.3
     alias: mariadb
     variables:
       MYSQL_ROOT_PASSWORD: rootpass
       MYSQL_DATABASE: orangehrm
       MYSQL_USER: orangeuser
       MYSQL_PASSWORD: orangepass
+
+  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-app-configured:1.0
+    alias: orangehrm
 
   - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-app-configured:1.0
     alias: orangehrm
@@ -49,28 +52,36 @@ ui_tests:
     - echo "Java version:" && java -version
     - echo "Maven version:" && mvn -v
 
+    # ⏱ 1) Auf MariaDB warten
     - echo "Warte auf MariaDB..."
     - |
-      for i in $(seq 1 5); do
-        if mysqladmin ping -h mariadb -prootpass --silent; then
-          echo "MariaDB is available."
+      apt-get update && apt-get install -y mariadb-client
+      for i in $(seq 1 30); do
+        if mysqladmin ping -hmariadb -prootpass --silent; then
+          echo "MariaDB ist erreichbar."
           break
         fi
-        echo "MariaDB not ready yet ($i/30)..."
+        echo "MariaDB noch nicht bereit ($i/30)..."
         sleep 5
       done
 
-    - echo "Wait for OrangeHRM..."
+    # ⏱ 2) DB mit seed.sql befüllen
+    - echo "Importiere seed.sql in Datenbank orangehrm..."
+    - mysql -hmariadb -uorangeuser -porangepass orangehrm < docker/db/seed.sql
+
+    # ⏱ 3) Auf OrangeHRM-App warten
+    - echo "Warte auf OrangeHRM..."
     - |
-      for i in $(seq 1 5); do
-        if curl -sSf "$BASE_URL" >/dev/null 2>&1; then
-          echo "OrangeHRM ist available."
+      for i in $(seq 1 40); do
+        if curl -sSf "${BASEURL}" >/dev/null 2>&1; then
+          echo "OrangeHRM ist erreichbar."
           break
         fi
-        echo "OrangeHRM not ready yet ($i/40)..."
+        echo "OrangeHRM noch nicht bereit ($i/40)..."
         sleep 5
       done
 
+    # ⏱ 4) Tests ausführen
     - mvn $MAVEN_CLI_OPTS clean test -Dsurefire.suiteXmlFiles=testng.xml
 
   artifacts:
