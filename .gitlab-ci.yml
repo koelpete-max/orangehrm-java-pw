@@ -46,7 +46,6 @@ ui_tests:
         sleep 5
       done
 
-    # 🧪 2) Tests ausführen (mit deinem testng.xml)
     - mvn $MAVEN_CLI_OPTS clean test -Dsurefire.suiteXmlFiles=testng-ci.xml
 
   artifacts:
