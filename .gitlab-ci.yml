@@ -14,12 +14,10 @@ cache:
     - .m2/repository
 
 services:
-  # 🧊 Gefrorene MariaDB mit fertigen OrangeHRM-Daten
-  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-db-frozen:os57-v1
+  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-db-seeded:1.0
     alias: orangehrm-db
 
-  # 🧊 Gefrorene OrangeHRM-App, die direkt login-fähig ist
-  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-app-frozen:os57-v1
+  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-app-configured:1.0
     alias: orangehrm-app
 
 before_script:
