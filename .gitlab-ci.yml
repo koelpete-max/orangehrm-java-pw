@@ -30,19 +30,23 @@ before_script:
 ui_tests:
   stage: test
   script:
-    # 🔎 1) Warten, bis OrangeHRM wirklich antwortet
-    - echo "Warte auf OrangeHRM..."
-    - |
-      for i in $(seq 1 40); do
-        if curl -sSf "$BASE_URL" >/dev/null 2>&1; then
-          echo "OrangeHRM ist erreichbar."
-          break
-        fi
-        echo "OrangeHRM noch nicht bereit ($i/40)..."
-        sleep 5
-      done
+    - echo "Java version:" && java -version
+    - echo "Maven version:" && mvn -v
 
-    - mvn $MAVEN_CLI_OPTS clean test -Dsurefire.suiteXmlFiles=testng-ci.xml
+    # Playwright system deps + Browser installieren (über Java CLI)
+    - echo "Install Playwright system deps..."
+    - mvn $MAVEN_CLI_OPTS exec:java \
+      -Dexec.mainClass=com.microsoft.playwright.CLI \
+      -Dexec.args="install-deps"
+
+    - echo "Install Playwright browsers..."
+    - mvn $MAVEN_CLI_OPTS exec:java \
+      -Dexec.mainClass=com.microsoft.playwright.CLI \
+      -Dexec.args="install"
+
+    # Jetzt erst die Tests
+    - echo "Run tests..."
+    - mvn $MAVEN_CLI_OPTS clean test -Dsurefire.suiteXmlFiles=testng.xml
 
   artifacts:
       when: always
@@ -50,10 +54,10 @@ ui_tests:
       reports:
         junit:
           - "**/surefire-reports/*.xml"
-#      paths:
-#        - "**/surefire-reports/"
-#        - "**/test-output/"
-#        - "**/test-results/"
+      paths:
+        - "**/surefire-reports/"
+        - "**/test-output/"
+        - "**/test-results/"
 
 
 
