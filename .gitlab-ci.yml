@@ -14,10 +14,10 @@ cache:
     - .m2/repository
 
 services:
-  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-db-seeded:1.0
+  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-db-frozen:os57-v1
     alias: orangehrm-db
 
-  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-app-configured:1.0
+  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-app-frozen:os57-v1
     alias: orangehrm-app
 
 before_script:
