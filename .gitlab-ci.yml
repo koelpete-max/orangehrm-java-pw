@@ -5,61 +5,51 @@ stages:
 
 variables:
   MAVEN_CLI_OPTS: "-B -q"
-  BASE_URL: "http://orangehrm-app"
-
-cache:
-  key: "maven-cache"
-  paths:
-    - .m2/repository
-
-services:
-  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-db-frozen:os57-v1
-    alias: orangehrm-db
-
-  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-app-frozen:os57-v1
-    alias: orangehrm-app
-
-before_script:
-  - echo "Java version:" && java -version
-  - echo "Maven version:" && mvn -v
-
-  # Falls Browser-Dependencies fehlen:
-  - npx playwright install-deps
-  - npx playwright install
+  # hier dein Basis-URL-Name aus dem Service:
+  BASE_URL: "http://orangehrm-app-frozen"
 
 ui_tests:
   stage: test
   script:
+    - echo "PWD:" && pwd
+    - echo "Repo-Inhalt:" && ls
+
     - echo "Java version:" && java -version
     - echo "Maven version:" && mvn -v
 
-    # Playwright system deps + Browser installieren (über Java CLI)
-    - echo "Install Playwright system deps..."
+    # 1) Playwright System-Deps installieren (wenn es knallt, ignorieren wir es erstmal,
+    #    damit mvn test trotzdem läuft und Reports erzeugt)
+    - echo "Playwright install-deps..."
     - mvn $MAVEN_CLI_OPTS exec:java \
-      -Dexec.mainClass=com.microsoft.playwright.CLI \
-      -Dexec.args="install-deps"
+        -Dexec.mainClass=com.microsoft.playwright.CLI \
+        -Dexec.args="install-deps" \
+        || echo "WARN: install-deps failed (wird ignoriert)"
 
-    - echo "Install Playwright browsers..."
+    # 2) Browser installieren
+    - echo "Playwright install..."
     - mvn $MAVEN_CLI_OPTS exec:java \
-      -Dexec.mainClass=com.microsoft.playwright.CLI \
-      -Dexec.args="install"
+        -Dexec.mainClass=com.microsoft.playwright.CLI \
+        -Dexec.args="install" \
+        || echo "WARN: install failed (wird ignoriert)"
 
-    # Jetzt erst die Tests
-    - echo "Run tests..."
-    - mvn $MAVEN_CLI_OPTS clean test -Dsurefire.suiteXmlFiles=testng.xml
+    # 3) Tests ausführen
+    - echo "Starte Tests..."
+    - mvn $MAVEN_CLI_OPTS test -Dsurefire.suiteXmlFiles=testng.xml
+
+    # 4) Kontrollausgabe: gibt es target/surefire-reports überhaupt?
+    - echo "Verzeichnis-Struktur nach mvn test:"
+    - ls -R
 
   artifacts:
-      when: always
-      expire_in: 14 days
-      reports:
-        junit:
-          - "**/surefire-reports/*.xml"
-      paths:
-        - "**/surefire-reports/"
-        - "**/test-output/"
-        - "**/test-results/"
-
-
+    when: always
+    expire_in: 14 days
+    reports:
+      junit:
+        - target/surefire-reports/*.xml
+    paths:
+      - target/surefire-reports/
+      - test-output/
+      - test-results/
 
 #image: mcr.microsoft.com/playwright/java:v1.56.0-jammy
 #
