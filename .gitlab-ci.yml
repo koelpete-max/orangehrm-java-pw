@@ -4,9 +4,7 @@ stages:
   - test
 
 variables:
-  MAVEN_CLI_OPTS: "-B -q"
-  # hier dein Basis-URL-Name aus dem Service:
-  BASE_URL: "http://orangehrm-app-frozen"
+  MAVEN_CLI_OPTS: "-B"
 
 ui_tests:
   stage: test
@@ -17,39 +15,13 @@ ui_tests:
     - echo "Java version:" && java -version
     - echo "Maven version:" && mvn -v
 
-    # 1) Playwright System-Deps installieren (wenn es knallt, ignorieren wir es erstmal,
-    #    damit mvn test trotzdem läuft und Reports erzeugt)
-    - echo "Playwright install-deps..."
-    - mvn $MAVEN_CLI_OPTS exec:java \
-        -Dexec.mainClass=com.microsoft.playwright.CLI \
-        -Dexec.args="install-deps" \
-        || echo "WARN: install-deps failed (wird ignoriert)"
-
-    # 2) Browser installieren
-    - echo "Playwright install..."
-    - mvn $MAVEN_CLI_OPTS exec:java \
-        -Dexec.mainClass=com.microsoft.playwright.CLI \
-        -Dexec.args="install" \
-        || echo "WARN: install failed (wird ignoriert)"
-
-    # 3) Tests ausführen
-    - echo "Starte Tests..."
+    # 👉 hier wirklich nur die Tests
+    - echo "Starte Tests mit Maven..."
     - mvn $MAVEN_CLI_OPTS test -Dsurefire.suiteXmlFiles=testng.xml
 
-    # 4) Kontrollausgabe: gibt es target/surefire-reports überhaupt?
+    # Kontrollausgabe: was gibt es nachher?
     - echo "Verzeichnis-Struktur nach mvn test:"
     - ls -R
-
-  artifacts:
-    when: always
-    expire_in: 14 days
-    reports:
-      junit:
-        - target/surefire-reports/*.xml
-    paths:
-      - target/surefire-reports/
-      - test-output/
-      - test-results/
 
 #image: mcr.microsoft.com/playwright/java:v1.56.0-jammy
 #
