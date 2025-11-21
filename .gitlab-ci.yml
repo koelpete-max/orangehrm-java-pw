@@ -50,10 +50,10 @@ ui_tests:
       reports:
         junit:
           - "**/surefire-reports/*.xml"
-      paths:
-        - "**/surefire-reports/"
-        - "**/test-output/"
-        - "**/test-results/"
+#      paths:
+#        - "**/surefire-reports/"
+#        - "**/test-output/"
+#        - "**/test-results/"
 
 
 
