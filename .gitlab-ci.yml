@@ -5,6 +5,14 @@ stages:
 
 variables:
   MAVEN_CLI_OPTS: "-B"
+  BASE_URL: "http://orangehrm"
+
+services:
+  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-db-frozen:os57-v1
+    alias: orangehrm-db
+
+  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-app-frozen:os57-v1
+    alias: orangehrm-app
 
 ui_tests:
   stage: test
