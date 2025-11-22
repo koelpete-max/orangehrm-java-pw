@@ -19,7 +19,7 @@ services:
   - name: orangehrm/orangehrm:5.7
     alias: orangehrm-app
     variables:
-      ORANGEHRM_DATABASE_HOST: orangehrm-db
+      ORANGEHRM_DATABASE_HOST: orangehrm-db-frozen
       ORANGEHRM_DATABASE_PORT_NUMBER: "3306"
       ORANGEHRM_DATABASE_NAME: orangehrm
       ORANGEHRM_DATABASE_USER: orangeuser
