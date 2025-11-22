@@ -206,7 +206,7 @@ public class BaseTest {
 
         // ENCRYPTION
         log.info("==> ENCRYPTION");
-        page.getByRole(AriaRole.TEXTBOX).first().fill("orangehrm-db-frozen");
+        page.getByRole(AriaRole.TEXTBOX).first().fill("orangehrm-db");
         page.getByRole(AriaRole.TEXTBOX).nth(2).fill("orangehrm");
         page.getByRole(AriaRole.TEXTBOX).nth(3).fill("orangeuser");
         page.locator("input[type=\"password\"]").fill("orangepass");
