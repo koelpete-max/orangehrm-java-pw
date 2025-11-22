@@ -145,7 +145,7 @@ public class BaseTest {
             test.fail(result.getThrowable());
         } else if (result.getStatus() == ITestResult.SUCCESS) {
             takeScreenshot(result.getName());
-            test.pass("Test PASSED");
+            test.pass( "Test PASSED");
         } else {
             test.skip("Test SKIPPED");
         }
@@ -206,7 +206,7 @@ public class BaseTest {
 
         // ENCRYPTION
         log.info("==> ENCRYPTION");
-        page.getByRole(AriaRole.TEXTBOX).first().fill("orangehrm-db");
+        page.getByRole(AriaRole.TEXTBOX).first().fill("orangehrm-db-frozen");
         page.getByRole(AriaRole.TEXTBOX).nth(2).fill("orangehrm");
         page.getByRole(AriaRole.TEXTBOX).nth(3).fill("orangeuser");
         page.locator("input[type=\"password\"]").fill("orangepass");
