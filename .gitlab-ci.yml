@@ -9,7 +9,8 @@ variables:
 
 services:
   # 1) Frozen DB from GitLab registry
-  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-db-frozen:os57-v1
+  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-db-frozen:os57-final
+
     alias: orangehrm-db
     # if needed, you can pass env vars here, but for a seeded DB
     # usually the defaults inside the image are enough
@@ -36,12 +37,12 @@ ui_tests:
     # Optional: quick check that the app is reachable
     - echo "Waiting for OrangeHRM..."
     - |
-      for i in $(seq 1 40); do
+      for i in $(seq 1 12); do
         if curl -sSf "$BASE_URL" >/dev/null 2>&1; then
-          echo "OrangeHRM is reachable."
+          echo "OrangeHRM seems reachable (curl succeeded)."
           break
         fi
-        echo "OrangeHRM not ready yet ($i/40)..."
+        echo "OrangeHRM not ready yet ($i/12)..."
         sleep 5
       done
 
