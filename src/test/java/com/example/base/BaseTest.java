@@ -59,14 +59,15 @@ public class BaseTest {
     protected TestUser defaultTestUser;
 
     @BeforeSuite
-    public void beforeSuite() {
-        playwright = Playwright.create();
-        browser = playwright.chromium().launch(
+    public void setupSuite() {
+        log.info("Setting up Test Suite");
+        var playwright = Playwright.create();
+        var browser = playwright.chromium().launch(
                 new BrowserType.LaunchOptions()
                         .setArgs(Arrays.asList("--start-maximized"))
                         .setHeadless(false)
         );
-        page = browser.newPage();
+        var page = browser.newPage();
 
         baseUrl = System.getenv("BASE_URL");
         baseUrl = (baseUrl == null || baseUrl.isBlank()) ? TestConfig.get("BASE_URL") : baseUrl;
@@ -75,22 +76,102 @@ public class BaseTest {
         }
 
         page.navigate(baseUrl);
-        if (page.getByRole(AriaRole.HEADING).textContent().contains("Welcome to OrangeHRM Starter")) {
+        page.waitForLoadState(LoadState.DOMCONTENTLOADED);
+        page.waitForLoadState(LoadState.NETWORKIDLE);
+        if (page.locator("//img[@alt='orangehrm-branding']").isVisible()) {
             log.info("Setup Wizard is there!!");
-            goThroughSetupWizard();
+            goThroughSetupWizard(page);
         }
-
         browser.close();
     }
 
-    private void goThroughSetupWizard() {
+    @BeforeMethod
+    public  void setUp(Method method) throws IOException {
+
+        playwright = Playwright.create();
+        browser = playwright.chromium().launch(
+                new BrowserType.LaunchOptions()
+                        .setArgs(Arrays.asList("--start-maximized"))
+                        .setHeadless(false)
+        );
+        page = browser.newPage();
+
+        di = DaggerTestComponent.factory().create(page);
+
+        homePage = di.homePage();
+        loginPage = di.loginPage();
+        adminPage = di.adminPage();
+        pimPage = di.pimPage();
+        dashboardPage = di.dashboardPage();
+        sidePanel = di.sidePanel();
+        topbarPanel = di.topbarPanel();
+
+        extent = ExtentManager.getInstance();
+        test = extent.createTest(method.getName());
+        tlog = new TestLogger(test);
+
+        baseUrl = System.getenv("BASE_URL");
+        baseUrl = (baseUrl == null || baseUrl.isBlank()) ? TestConfig.get("BASE_URL") : baseUrl;
+        if (baseUrl == null || baseUrl.isBlank()) {
+            throw new IllegalStateException("BASE_URL is not set");
+        }
+
+        setDefaultTestUser();
+
+        log.info("Test '{}' started ", method.getName());
+    }
+
+    @AfterMethod
+    public void tearDown(ITestResult result) {
+        if (result.getStatus() == ITestResult.FAILURE) {
+            takeScreenshot(result);
+            test.fail(result.getThrowable());
+        } else if (result.getStatus() == ITestResult.SUCCESS) {
+            takeScreenshot(result);
+            test.pass("Test PASSED");
+        } else {
+            test.skip("Test SKIPPED");
+        }
+        extent.flush();
+
+        if (browser != null) {
+            log.info("Closing Browser");
+            browser.close();
+        }
+
+        if (playwright != null) {
+            log.info("Closing Playwright");
+            playwright.close();
+        }
+    }
+
+    private void takeScreenshot(ITestResult result) {
+        String screenshotPath = ScreenShotUtil.takeScreenShot(page, result.getName());
+        log.info("Screenshot stored at: {}", screenshotPath);
+
+        String fileName = Paths.get(screenshotPath).getFileName().toString();
+        String relativeToReport = "screenshots/" + fileName;
+
+        test.addScreenCaptureFromPath(relativeToReport, "screenshot");
+    }
+
+    protected void navigateToHomePage(String url) {
+        loginPage = homePage.navigateTo(url);
+    }
+
+    private void goThroughSetupWizard(Page page) {
 
         // Welcome to OrangeHRM Starter
-        log.info("==> Welcome to OrangeHRM Starter");
-        page.locator("label")
+        var upgradeLocator = page.locator("label")
                 .filter(new Locator.FilterOptions()
                         .setHasText("Upgrading an Existing"))
-                .locator("span").click();
+                .locator("span");
+        if (!upgradeLocator.isVisible()) {
+            return;
+        }
+
+        log.info("==> Welcome to OrangeHRM Starter");
+        upgradeLocator.click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions()
                 .setName("Next")).click();
         page.locator("i.oxd-icon.bi-check.oxd-checkbox-input-icon")
@@ -157,11 +238,13 @@ public class BaseTest {
         log.info("==> Upgrade Complete");
         waitForPageCondition(page, "Launch OrangeHRM", "==> Launch OrangeHRM button is ready");
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions()
-                .setName("Launch OrangeHRM"))
+                        .setName("Launch OrangeHRM"))
                 .click();
         page.waitForCondition(() -> {
             return page.locator("//img[@alt='company-branding']").isVisible();
         });
+        page.waitForLoadState(LoadState.DOMCONTENTLOADED);
+        page.waitForLoadState(LoadState.NETWORKIDLE);
         if (!page.locator("//img[@alt='company-branding']").isVisible()) {
             throw new IllegalStateException("Upgrade Complete page failed");
         }
@@ -177,79 +260,6 @@ public class BaseTest {
             }
             return visible;
         });
-    }
-
-    @BeforeMethod
-    public  void setUp(Method method) throws IOException {
-
-        playwright = Playwright.create();
-        browser = playwright.chromium().launch(
-                new BrowserType.LaunchOptions()
-                        .setArgs(Arrays.asList("--start-maximized"))
-                        .setHeadless(false)
-        );
-        page = browser.newPage();
-
-        di = DaggerTestComponent.factory().create(page);
-
-        homePage = di.homePage();
-        loginPage = di.loginPage();
-        adminPage = di.adminPage();
-        pimPage = di.pimPage();
-        dashboardPage = di.dashboardPage();
-        sidePanel = di.sidePanel();
-        topbarPanel = di.topbarPanel();
-
-        extent = ExtentManager.getInstance();
-        test = extent.createTest(method.getName());
-        tlog = new TestLogger(test);
-
-        baseUrl = System.getenv("BASE_URL");
-        baseUrl = (baseUrl == null || baseUrl.isBlank()) ? TestConfig.get("BASE_URL") : baseUrl;
-        if (baseUrl == null || baseUrl.isBlank()) {
-            throw new IllegalStateException("BASE_URL is not set");
-        }
-        setDefaultTestUser();
-
-        log.info("Test '{}' started ", method.getName());
-    }
-
-    @AfterMethod
-    public void tearDown(ITestResult result) {
-        if (result.getStatus() == ITestResult.FAILURE) {
-            takeScreenshot(result);
-            test.fail(result.getThrowable());
-        } else if (result.getStatus() == ITestResult.SUCCESS) {
-            takeScreenshot(result);
-            test.pass("Test PASSED");
-        } else {
-            test.skip("Test SKIPPED");
-        }
-        extent.flush();
-
-        if (browser != null) {
-            log.info("Closing Browser");
-            browser.close();
-        }
-
-        if (playwright != null) {
-            log.info("Closing Playwright");
-            playwright.close();
-        }
-    }
-
-    private void takeScreenshot(ITestResult result) {
-        String screenshotPath = ScreenShotUtil.takeScreenShot(page, result.getName());
-        log.info("Screenshot stored at: {}", screenshotPath);
-
-        String fileName = Paths.get(screenshotPath).getFileName().toString();
-        String relativeToReport = "screenshots/" + fileName;
-
-        test.addScreenCaptureFromPath(relativeToReport, "screenshot");
-    }
-
-    protected void navigateToHomePage(String url) {
-        loginPage = homePage.navigateTo(url);
     }
 
     private void setDefaultTestUser() throws NullPointerException, IOException {
