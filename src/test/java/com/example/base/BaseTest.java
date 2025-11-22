@@ -65,7 +65,7 @@ public class BaseTest {
         var browser = playwright.chromium().launch(
                 new BrowserType.LaunchOptions()
                         .setArgs(Arrays.asList("--start-maximized"))
-                        .setHeadless(false)
+                        .setHeadless(true)
         );
         var page = browser.newPage();
 
@@ -92,7 +92,7 @@ public class BaseTest {
         browser = playwright.chromium().launch(
                 new BrowserType.LaunchOptions()
                         .setArgs(Arrays.asList("--start-maximized"))
-                        .setHeadless(false)
+                        .setHeadless(true)
         );
         page = browser.newPage();
 
