@@ -11,16 +11,22 @@ import java.util.Date;
 
 public class ScreenShotUtil {
 
-    public static String takeScreenShot(Page page, String name) {
+    public static String takeScreenShot(Page page, String testName) {
         var timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String fileName = name.replaceAll("[^a-zA-Z0-9-_]", "_") + timeStamp + ".jpg";
-        Path target = Paths.get("test-output", "screenshots", fileName);
+        var relativeDir = Paths.get("test-output", "screenshots");
+        var fileName = testName + "_" + timeStamp + ".jpg";
+
         try {
-            Files.createDirectories(target.getParent());
-            page.screenshot(new Page.ScreenshotOptions().setPath(target));
-            return target.toString();
+            Files.createDirectories(relativeDir);
+            Path screenshotPath = relativeDir.resolve(fileName);
+
+            page.screenshot(new Page.ScreenshotOptions()
+                    .setPath(screenshotPath)
+                    .setFullPage(true));
+            return screenshotPath.toString();
         } catch (IOException e) {
-            throw new RuntimeException("Could not create screenshot", e);
+            System.err.println("Failed to create screenshot directory or save screenshot: " + e.getMessage());
+            return null;
         }
     }
 }
