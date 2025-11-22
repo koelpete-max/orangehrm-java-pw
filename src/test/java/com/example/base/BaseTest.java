@@ -80,7 +80,7 @@ public class BaseTest {
         test = extent.createTest("beforeSuite");
         testLog = new TestLogger(test);
 
-        testLog.step("Navigate to Base URL");
+        testLog.step("Navigate to Base URL: " + baseUrl);
         page.navigate(baseUrl);
         page.waitForLoadState(LoadState.DOMCONTENTLOADED);
         page.waitForLoadState(LoadState.NETWORKIDLE);
