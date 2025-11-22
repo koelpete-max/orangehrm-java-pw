@@ -5,26 +5,51 @@ stages:
 
 variables:
   MAVEN_CLI_OPTS: "-B"
-  BASE_URL: "http://orangehrm-app"
+  BASE_URL: "http://orangehrm-app"  # host = service alias
 
 services:
+  # 1) Frozen DB from GitLab registry
   - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-db-frozen:os57-v1
     alias: orangehrm-db
+    # if needed, you can pass env vars here, but for a seeded DB
+    # usually the defaults inside the image are enough
 
-  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-app-frozen:os57-v1
+  # 2) Official OrangeHRM 5.7 app, pointing to the DB
+  - name: orangehrm/orangehrm:5.7
     alias: orangehrm-app
+    variables:
+      ORANGEHRM_DATABASE_HOST: orangehrm-db
+      ORANGEHRM_DATABASE_PORT_NUMBER: "3306"
+      ORANGEHRM_DATABASE_NAME: orangehrm
+      ORANGEHRM_DATABASE_USER: orangeuser
+      ORANGEHRM_DATABASE_PASSWORD: orangepass
+      ORANGEHRM_ENCRYPTION: "no"     # if available / needed
 
 ui_tests:
   stage: test
   script:
     - echo "PWD:" && pwd
-    - echo "Repo-Inhalt:" && ls
+    - echo "Repo:" && ls
     - echo "Java version:" && java -version
     - echo "Maven version:" && mvn -v
-    - echo "Starte Tests mit Maven..."
+
+    # Optional: quick check that the app is reachable
+    - echo "Waiting for OrangeHRM..."
+    - |
+      for i in $(seq 1 6); do
+        if curl -sSf "$BASE_URL" >/dev/null 2>&1; then
+          echo "OrangeHRM is reachable."
+          break
+        fi
+        echo "OrangeHRM not ready yet ($i/40)..."
+        sleep 5
+      done
+
+    # Now run your TestNG suite
     - mvn $MAVEN_CLI_OPTS test -Dsurefire.suiteXmlFiles=testng.xml
-    - echo "Verzeichnis-Struktur nach mvn test:"
-    - ls -R
+
+    # For debugging:
+    - echo "Tree after mvn test:" && ls -R
 
   artifacts:
     when: always
@@ -138,9 +163,9 @@ ui_tests:
 #        sleep 5
 #      done
 #
-#    # ⏱ 2) DB mit seed.sql befüllen
-#    - echo "Importiere seed.sql in Datenbank orangehrm..."
-#    - mysql -hmariadb -uorangeuser -porangepass orangehrm < docker/db/seed.sql
+#    # ⏱ 2) DB mit seed-out.sql befüllen
+#    - echo "Importiere seed-out.sql in Datenbank orangehrm..."
+#    - mysql -hmariadb -uorangeuser -porangepass orangehrm < docker/db/seed-out.sql
 #
 #    # ⏱ 3) Auf OrangeHRM-App warten
 #    - echo "Warte auf OrangeHRM..."
