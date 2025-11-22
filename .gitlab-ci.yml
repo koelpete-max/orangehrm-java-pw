@@ -5,21 +5,20 @@ stages:
 
 variables:
   MAVEN_CLI_OPTS: "-B"
-  BASE_URL: "http://orangehrm-app"  # host = service alias
+  BASE_URL: "http://orangehrm"  # host = service alias
 
 services:
   # 1) Frozen DB from GitLab registry
   - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-db-frozen:os57-final
-
     alias: orangehrm-db
     # if needed, you can pass env vars here, but for a seeded DB
     # usually the defaults inside the image are enough
 
   # 2) Official OrangeHRM 5.7 app, pointing to the DB
   - name: orangehrm/orangehrm:5.7
-    alias: orangehrm-app
+    alias: orangehrm
     variables:
-      ORANGEHRM_DATABASE_HOST: orangehrm-db-frozen
+      ORANGEHRM_DATABASE_HOST: orangehrm-db
       ORANGEHRM_DATABASE_PORT_NUMBER: "3306"
       ORANGEHRM_DATABASE_NAME: orangehrm
       ORANGEHRM_DATABASE_USER: orangeuser
