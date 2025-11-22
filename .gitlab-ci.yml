@@ -36,7 +36,7 @@ ui_tests:
     # Optional: quick check that the app is reachable
     - echo "Waiting for OrangeHRM..."
     - |
-      for i in $(seq 1 6); do
+      for i in $(seq 1 40); do
         if curl -sSf "$BASE_URL" >/dev/null 2>&1; then
           echo "OrangeHRM is reachable."
           break
@@ -46,6 +46,9 @@ ui_tests:
       done
 
     # Now run your TestNG suite
+    - mkdir -p test-output test-results
+    - echo "Java version:" && java -version
+    - echo "Maven version:" && mvn -v
     - mvn $MAVEN_CLI_OPTS test -Dsurefire.suiteXmlFiles=testng.xml
 
     # For debugging:
