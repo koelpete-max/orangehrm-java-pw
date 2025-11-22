@@ -16,19 +16,19 @@ public class DashboardPageTest extends BaseTest {
 
     @Test
     public void verifyDashboardPageTest() {
-        tlog.step("Verifying Dashboard Page Test");
+        testLog.step("Verifying Dashboard Page Test");
 
-        tlog.step("Asserting that the Dashboard Page is loaded");
+        testLog.step("Asserting that the Dashboard Page is loaded");
         sidePanel.selectMenuActiveItem(SidePanelItem.DASHBOARD);
         Assert.assertEquals(sidePanel.getMenuActiveItemName(),
                 SidePanelItem.DASHBOARD.toString()
         );
 
-        tlog.step("Asserting that the Dashboard page components are available");
+        testLog.step("Asserting that the Dashboard page components are available");
         Assert.assertTrue(dashboardPage.isComponentPageReady(),
                 "Dashboard page components not properly loaded"
         );
 
-        tlog.step("Admin Dashboard is successfully loaded");
+        testLog.step("Admin Dashboard is successfully loaded");
     }
 }

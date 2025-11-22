@@ -40,7 +40,7 @@ public class BaseTest {
 
     protected ExtentReports extent;
     protected ExtentTest test;
-    protected TestLogger tlog;
+    protected TestLogger testLog;
 
     protected HomePage homePage;
     protected LoginPage loginPage;
@@ -75,6 +75,11 @@ public class BaseTest {
             throw new IllegalStateException("BASE_URL is not set");
         }
 
+        extent = ExtentManager.getInstance();
+        test = extent.createTest("beforeSuite");
+        testLog = new TestLogger(test);
+
+        testLog.step("Navigate to Base URL");
         page.navigate(baseUrl);
         page.waitForLoadState(LoadState.DOMCONTENTLOADED);
         page.waitForLoadState(LoadState.NETWORKIDLE);
@@ -82,6 +87,7 @@ public class BaseTest {
             log.info("Setup Wizard is there!!");
             goThroughSetupWizard(page);
         }
+        testLog.step("Closing Browser");
         browser.close();
     }
 
@@ -108,7 +114,7 @@ public class BaseTest {
 
         extent = ExtentManager.getInstance();
         test = extent.createTest(method.getName());
-        tlog = new TestLogger(test);
+        testLog = new TestLogger(test);
 
         baseUrl = System.getenv("BASE_URL");
         baseUrl = (baseUrl == null || baseUrl.isBlank()) ? TestConfig.get("BASE_URL") : baseUrl;

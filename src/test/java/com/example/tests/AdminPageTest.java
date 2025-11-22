@@ -20,15 +20,15 @@ public class AdminPageTest extends BaseTest {
     @Test
     public void verifyAdminPageTest() {
 
-        tlog.step("Verifying Admin Page Test");
+        testLog.step("Verifying Admin Page Test");
 
-        tlog.step("Asserting that the Admin Page is loaded");
+        testLog.step("Asserting that the Admin Page is loaded");
         sidePanel.selectMenuActiveItem(SidePanelItem.ADMIN);
         Assert.assertEquals(sidePanel.getMenuActiveItemName(), SidePanelItem.ADMIN.toString());
 
         Assert.assertTrue(topbarPanel.getPanelText().contains(TopbarPanelText.ADMIN.toString()));
 
-        tlog.step("Admin Page is successfully loaded");
+        testLog.step("Admin Page is successfully loaded");
     }
 
     @DataProvider(name = "userRoleData")
@@ -42,17 +42,17 @@ public class AdminPageTest extends BaseTest {
     @Test(dataProvider = "userRoleData")
     public void verifyUserRolesTest(UserRole userRole) {
 
-        tlog.step("Verifying roles on the Admin Page");
+        testLog.step("Verifying roles on the Admin Page");
 
         sidePanel.selectMenuActiveItem(SidePanelItem.ADMIN);
 
         adminPage.selectUserRole(userRole);
 
-        tlog.step("Asserting that the role is properly displayed");
+        testLog.step("Asserting that the role is properly displayed");
         Assert.assertTrue(adminPage.getSelectedRoleCount(userRole),
                 String.format("Failed to select role '%s'. Different roles were selected", userRole)
         );
 
-        tlog.step("Verification for role '" + userRole.toString() + "' passed");
+        testLog.step("Verification for role '" + userRole.toString() + "' passed");
     }
 }

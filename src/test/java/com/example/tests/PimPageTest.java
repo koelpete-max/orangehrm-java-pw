@@ -32,21 +32,21 @@ public class PimPageTest extends BaseTest {
 
     @Test(dataProvider = "expectedEmployeeData")
     public void employeeInformationTest(EmployeeData expectedEmployeeData) throws Exception {
-        tlog.step("Verifying employee information Test");
+        testLog.step("Verifying employee information Test");
         if (!Objects.equals(topbarStaticText, TopbarPanelText.PIM.toString())) {
             throw new Exception("PIM Panel not visible");
         }
 
-        tlog.step("Searching employee information for "+
+        testLog.step("Searching employee information for "+
                 expectedEmployeeData.getFirstMiddleName()+ " " +expectedEmployeeData.getLastName() +
                 ", id="+expectedEmployeeData.getId()
         );
 
-        tlog.step("Asserting employee information");
+        testLog.step("Asserting employee information");
         var employeeData = pimPage.searchEmployeeByName(expectedEmployeeData.getFirstMiddleName());
         Assert.assertNotNull(employeeData, "Employee data not found");
         Assert.assertEquals(expectedEmployeeData, employeeData, "Employee data not match");
 
-        tlog.step("Employee information successfully validated");
+        testLog.step("Employee information successfully validated");
     }
 }
