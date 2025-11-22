@@ -24,6 +24,7 @@ import com.microsoft.playwright.options.LoadState;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
@@ -61,13 +62,13 @@ public class BaseTest {
     @BeforeSuite
     public void setupSuite() {
         log.info("Setting up Test Suite");
-        var playwright = Playwright.create();
-        var browser = playwright.chromium().launch(
+        playwright = Playwright.create();
+        browser = playwright.chromium().launch(
                 new BrowserType.LaunchOptions()
                         .setArgs(Arrays.asList("--start-maximized"))
                         .setHeadless(true)
         );
-        var page = browser.newPage();
+        page = browser.newPage();
 
         baseUrl = System.getenv("BASE_URL");
         baseUrl = (baseUrl == null || baseUrl.isBlank()) ? TestConfig.get("BASE_URL") : baseUrl;
@@ -83,12 +84,22 @@ public class BaseTest {
         page.navigate(baseUrl);
         page.waitForLoadState(LoadState.DOMCONTENTLOADED);
         page.waitForLoadState(LoadState.NETWORKIDLE);
-        if (page.locator("//img[@alt='orangehrm-branding']").isVisible()) {
-            log.info("Setup Wizard is there!!");
-            goThroughSetupWizard(page);
+        try {
+            if (page.locator("//img[@alt='orangehrm-branding']").isVisible()) {
+                log.info("Setup Wizard is there!!");
+                goThroughSetupWizard();
+            }
+        } finally {
+            takeScreenshot("beforeSuite");
+            extent.flush();
+            testLog.step("Closing Browser");
+            browser.close();
         }
-        testLog.step("Closing Browser");
-        browser.close();
+    }
+
+    @AfterSuite
+    public void tearDownSuite() {
+
     }
 
     @BeforeMethod
@@ -130,10 +141,10 @@ public class BaseTest {
     @AfterMethod
     public void tearDown(ITestResult result) {
         if (result.getStatus() == ITestResult.FAILURE) {
-            takeScreenshot(result);
+            takeScreenshot(result.getName());
             test.fail(result.getThrowable());
         } else if (result.getStatus() == ITestResult.SUCCESS) {
-            takeScreenshot(result);
+            takeScreenshot(result.getName());
             test.pass("Test PASSED");
         } else {
             test.skip("Test SKIPPED");
@@ -151,8 +162,8 @@ public class BaseTest {
         }
     }
 
-    private void takeScreenshot(ITestResult result) {
-        String screenshotPath = ScreenShotUtil.takeScreenShot(page, result.getName());
+    private void takeScreenshot(String screenshotText) {
+        String screenshotPath = ScreenShotUtil.takeScreenShot(page, screenshotText);
         log.info("Screenshot stored at: {}", screenshotPath);
 
         String fileName = Paths.get(screenshotPath).getFileName().toString();
@@ -165,7 +176,7 @@ public class BaseTest {
         loginPage = homePage.navigateTo(url);
     }
 
-    private void goThroughSetupWizard(Page page) {
+    private void goThroughSetupWizard() {
 
         // Welcome to OrangeHRM Starter
         var upgradeLocator = page.locator("label")
