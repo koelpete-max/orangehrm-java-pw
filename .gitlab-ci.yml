@@ -8,6 +8,7 @@ variables:
   BASE_URL: "http://orangehrm"
 
 services:
+  # DB
   - name: mariadb:11.3
     alias: orangehrm-db
     variables:
@@ -16,6 +17,7 @@ services:
       MARIADB_USER: orangeuser
       MARIADB_PASSWORD: orangepass
 
+  # App (offizielles OrangeHRM 5.7)
   - name: orangehrm/orangehrm:5.7
     alias: orangehrm
     variables:
@@ -24,54 +26,41 @@ services:
       ORANGEHRM_DATABASE_NAME: orangehrm
       ORANGEHRM_DATABASE_USER: orangeuser
       ORANGEHRM_DATABASE_PASSWORD: orangepass
+      ORANGEHRM_ENCRYPTION: "no"
 
 ui_tests:
   stage: test
   script:
     - echo "PWD:" && pwd
-    - echo "Repo:" && ls
-
+    - echo "Repo-Inhalt:" && ls
     - echo "Java version:" && java -version
     - echo "Maven version:" && mvn -v
 
-    # 🔧 1) DEBUG: ist mysql überhaupt da?
-    - echo "Before install: which mysql?"
-    - which mysql || echo "mysql NOT found before install"
-
-    # 🔧 2) mysql + curl installieren
-    - echo "Installing mysql client + curl..."
-    - apt-get update -y
-    - apt-get install -y default-mysql-client curl
-
-    # 🔧 3) DEBUG: jetzt sollte mysql da sein
-    - echo "After install: which mysql?"
-    - which mysql || echo "mysql STILL not found after install!"
-
-    # 🔍 4) DB-Check (non-fatal)
+    # OPTIONAL: DB-Check (wird ignoriert, wenn mysql fehlt)
     - echo "Check DB connectivity (non-fatal)..."
     - |
       set +e
-      mysql --protocol=tcp \
-            -horangehrm-db \
-            -P3306 \
-            -uorangeuser -porangepass \
-            -e "SHOW DATABASES;"
-      echo "mysql exit code: $?"
+      if command -v mysql >/dev/null 2>&1; then
+        mysql --protocol=tcp \
+              -horangehrm-db \
+              -P3306 \
+              -uorangeuser -porangepass \
+              -e "SHOW DATABASES;"
+        echo "mysql exit code: $?"
+      else
+        echo "mysql client not installed, skipping DB check."
+      fi
       set -e
 
-    # 🔍 5) Welche Seite liefert OrangeHRM?
-    - echo "Probe OrangeHRM homepage (headers + first lines)..."
-    - |
-      set +e
-      curl -sS -D- "$BASE_URL" | head -n 40
-      echo "curl exit code: $?"
-      set -e
+    # Seite kurz „anpingen“
+    - echo "Check BASE_URL reachable..."
+    - curl -sS -D- "$BASE_URL" | head -n 20 || echo "curl to BASE_URL failed (will still run tests)"
 
-    # 🔁 6) Tests
+    # Tests starten
     - echo "Running Maven tests..."
     - mvn $MAVEN_CLI_OPTS test -Dsurefire.suiteXmlFiles=testng.xml
 
-    - echo "Tree after mvn test:"
+    - echo "Verzeichnis-Struktur nach mvn test:"
     - ls -R
 
   artifacts:
@@ -83,3 +72,4 @@ ui_tests:
     paths:
       - target/surefire-reports/
       - test-output/
+      - test-results/
