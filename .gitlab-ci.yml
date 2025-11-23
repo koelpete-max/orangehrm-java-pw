@@ -32,44 +32,28 @@ ui_tests:
     - echo "Repo-Inhalt:" && ls
     - echo "Java version:" && java -version
     - echo "Maven version:" && mvn -v
-
-    # 1) Install MySQL client + curl in the job container
     - echo "Installing mysql client + curl..."
     - apt-get update && apt-get install -y default-mysql-client curl
-
-    # 2) Check DB connectivity with mysql (this time for real)
     - echo "Checking DB connectivity to orangehrm-db:3306 with mysql..."
-    - |
+    - >
       for i in $(seq 1 30); do
         if mysql --protocol=tcp \
                  -horangehrm-db \
                  -P3306 \
                  -uorangeuser -porangepass \
-                 -e "SHOW DATABASES;" ; then
-          echo "DB is reachable."
-          break
-        fi
-        echo "DB not ready yet ($i/30)..."
-        sleep 5
+                 -e "SHOW DATABASES;"; then
+          echo "DB is reachable.";
+          break;
+        fi;
+        echo "DB not ready yet ($i/30)...";
+        sleep 5;
       done
-
-    # 3) Check that BASE_URL is reachable
     - echo "Checking BASE_URL: $BASE_URL"
-    - |
-      if curl -sS -D- "$BASE_URL" | head -n 20; then
-        echo "BASE_URL reachable."
-      else
-        echo "BASE_URL not reachable (curl failed, but tests will still run)."
-      fi
-
-    # 4) Run tests
+    - 'curl -sS -D- "$BASE_URL" | head -n 20 || echo "BASE_URL not reachable"'
     - echo "Running Maven tests..."
     - mvn $MAVEN_CLI_OPTS test -Dsurefire.suiteXmlFiles=testng.xml
-
-    # 5) Show structure for debugging
     - echo "Verzeichnis-Struktur nach mvn test:"
     - ls -R
-
   artifacts:
     when: always
     expire_in: 14 days
