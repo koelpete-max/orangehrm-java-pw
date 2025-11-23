@@ -49,7 +49,7 @@ uui_tests:
           echo "DB is reachable."
           break
         fi
-        echo "⏳ DB not ready yet ($i/30)..."
+        echo "DB not ready yet ($i/30)..."
         sleep 5
       done
 
