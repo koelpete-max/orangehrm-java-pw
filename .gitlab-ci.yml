@@ -42,7 +42,7 @@ ui_tests:
     - echo "Installing mysql client + curl..."
     - apt-get update && apt-get install -y default-mysql-client curl
 
-    - echod "Create the same network you used locally"
+    - echo "Create the same network you used locally"
     - docker network create orange-net
 
     - echo "Start DB on that network"
