@@ -97,11 +97,6 @@ public class BaseTest {
         }
     }
 
-    @AfterSuite
-    public void tearDownSuite() {
-
-    }
-
     @BeforeMethod
     public  void setUp(Method method) throws IOException {
 
