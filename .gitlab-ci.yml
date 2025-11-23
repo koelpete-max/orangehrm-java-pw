@@ -29,6 +29,9 @@ services:
 
 ui_tests:
   stage: test
+  before_script:
+    - apt-get update
+    - apt-get install -y mariadb-client curl
   script:
     - echo "PWD:" && pwd
     - echo "Repo:" && ls
@@ -38,8 +41,8 @@ ui_tests:
     - echo "Waiting for MariaDB at orangehrm-db:3306..."
     - |
       for i in $(seq 1 30); do
-        if nc -z orangehrm-db 3306; then
-          echo "MariaDB is reachable."
+        if mysqladmin ping -horangehrm-db -P3306 -uorangeuser -porangepass --silent; then
+          echo "MariaDB is up."
           break
         fi
         echo "MariaDB not ready yet ($i/30)..."
