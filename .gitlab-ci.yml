@@ -6,24 +6,30 @@ stages:
 variables:
   MAVEN_CLI_OPTS: "-B"
   BASE_URL: "http://orangehrm"
+  DOCKER_HOST: tcp://dind:2375
+  DOCKER_TLS_CERTDIR: ""
+
+#services:
+#  - name: mariadb:11.3
+#    alias: orangehrm-db
+#    variables:
+#      MARIADB_ROOT_PASSWORD: rootpass
+#      MARIADB_DATABASE: orangehrm
+#      MARIADB_USER: orangeuser
+#      MARIADB_PASSWORD: orangepass
+#
+#  - name: orangehrm/orangehrm:5.7
+#    alias: orangehrm
+#    variables:
+#      ORANGEHRM_DATABASE_HOST: orangehrm-db
+#      ORANGEHRM_DATABASE_PORT_NUMBER: "3306"
+#      ORANGEHRM_DATABASE_NAME: orangehrm
+#      ORANGEHRM_DATABASE_USER: orangeuser
+#      ORANGEHRM_DATABASE_PASSWORD: orangepass
 
 services:
-  - name: mariadb:11.3
-    alias: orangehrm-db
-    variables:
-      MARIADB_ROOT_PASSWORD: rootpass
-      MARIADB_DATABASE: orangehrm
-      MARIADB_USER: orangeuser
-      MARIADB_PASSWORD: orangepass
-
-  - name: orangehrm/orangehrm:5.7
-    alias: orangehrm
-    variables:
-      ORANGEHRM_DATABASE_HOST: orangehrm-db
-      ORANGEHRM_DATABASE_PORT_NUMBER: "3306"
-      ORANGEHRM_DATABASE_NAME: orangehrm
-      ORANGEHRM_DATABASE_USER: orangeuser
-      ORANGEHRM_DATABASE_PASSWORD: orangepass
+  - name: docker:dind
+    alias: dind
 
 ui_tests:
   stage: test
@@ -32,8 +38,21 @@ ui_tests:
     - echo "Repo-content:" && ls
     - echo "Java version:" && java -version
     - echo "Maven version:" && mvn -v
+
     - echo "Installing mysql client + curl..."
     - apt-get update && apt-get install -y default-mysql-client curl
+
+    - echod "Create the same network you used locally"
+    - docker network create orange-net
+
+    - echo "Start DB on that network"
+    - docker run -d --name orangehrm-db --network orange-net \
+      -e MARIADB_ROOT_PASSWORD=rootpass \
+      -e MARIADB_DATABASE=orangehrm \
+      -e MARIADB_USER=orangeuser \
+      -e MARIADB_PASSWORD=orangepass \
+      mariadb:11.3
+
     - mysql -h orangehrm-db -u orangeuser -porangepass -e "SHOW DATABASES;"
     - echo "Checking DB connectivity to orangehrm-db:3306..."
     - |
@@ -49,7 +68,18 @@ ui_tests:
       echo "Running Maven tests..."
       echo "BASE_URL = $BASE_URL"
       mvn $MAVEN_CLI_OPTS test -Dsurefire.suiteXmlFiles=testng.xml
-    - echo "Verzeichnis-Struktur nach mvn test:"
+
+    - echo "Start OrangeHRM on the same network"
+    - docker run -d --name orangehrm --network orange-net \
+        -p 8080:80 \
+        -e ORANGEHRM_DATABASE_HOST=orangehrm-db \
+        -e ORANGEHRM_DATABASE_PORT_NUMBER=3306 \
+        -e ORANGEHRM_DATABASE_NAME=orangehrm \
+        -e ORANGEHRM_DATABASE_USER=orangeuser \
+        -e ORANGEHRM_DATABASE_PASSWORD=orangepass \
+        orangehrm/orangehrm:5.7
+
+    - echo "Tree structure after mvn test:"
     - ls -R
 
   artifacts:
