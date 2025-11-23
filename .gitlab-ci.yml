@@ -8,10 +8,16 @@ variables:
   BASE_URL: "http://orangehrm"  # host = service alias
 
 services:
-  # 1) Frozen DB from GitLab registry
-  - name: registry.gitlab.com/koelpete-group/hrm-jv-pw/orangehrm-db-frozen:os57-final
+  # Plain MariaDB for OrangeHRM
+  - name: mariadb:11.3
     alias: orangehrm-db
+    variables:
+      MARIADB_ROOT_PASSWORD: rootpass
+      MARIADB_DATABASE: orangehrm
+      MARIADB_USER: orangeuser
+      MARIADB_PASSWORD: orangepass
 
+  # Official OrangeHRM 5.7 app container
   - name: orangehrm/orangehrm:5.7
     alias: orangehrm
     variables:
@@ -20,7 +26,6 @@ services:
       ORANGEHRM_DATABASE_NAME: orangehrm
       ORANGEHRM_DATABASE_USER: orangeuser
       ORANGEHRM_DATABASE_PASSWORD: orangepass
-      ORANGEHRM_ENCRYPTION: "no"     # if available / needed
 
 ui_tests:
   stage: test
@@ -30,10 +35,16 @@ ui_tests:
     - echo "Java version:" && java -version
     - echo "Maven version:" && mvn -v
 
-    # Debug: Install client and test DB connection
-    - apt-get update && apt-get install -y mariadb-client
-    - echo "Testing DB connectivity to orangehrm-db:3306 ..."
-    - mysql -horangehrm-db -P3306 -uorangeuser -porangepass -e "SHOW DATABASES;"
+    - echo "Waiting for MariaDB at orangehrm-db:3306..."
+    - |
+      for i in $(seq 1 30); do
+        if nc -z orangehrm-db 3306; then
+          echo "MariaDB is reachable."
+          break
+        fi
+        echo "MariaDB not ready yet ($i/30)..."
+        sleep 2
+      done
 
     # Optional: quick check that the app is reachable
     - echo "Waiting for OrangeHRM..."
@@ -65,7 +76,6 @@ ui_tests:
     paths:
       - target/surefire-reports/
       - test-output/
-      - test-results/
 
 #image: mcr.microsoft.com/playwright/java:v1.56.0-jammy
 #
