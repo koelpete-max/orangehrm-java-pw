@@ -87,7 +87,7 @@ public class BaseTest {
         try {
             if (page.locator("//img[@alt='orangehrm-branding']").isVisible()) {
                 log.info("Setup Wizard is there!!");
-                goThroughSetupWizard();
+//                goThroughSetupWizard();
             }
         } finally {
             takeScreenshot("beforeSuite");
