@@ -29,12 +29,22 @@ ui_tests:
   stage: test
   script:
     - echo "PWD:" && pwd
-    - echo "Repo-Inhalt:" && ls
+    - echo "Repo-content:" && ls
     - echo "Java version:" && java -version
     - echo "Maven version:" && mvn -v
     - echo "Installing mysql client + curl..."
     - apt-get update && apt-get install -y default-mysql-client curl
+    - echo "Checking DB connectivity to orangehrm-db:3306..."
     - |
+      for i in $(seq 1 30); do
+        if mysql -h orangehrm-db -P 3306 -u orangeuser -porangepass -e "SELECT 1" orangehrm; then
+          echo "✅ DB is up and reachable"
+          break
+        else
+          echo "❌ DB not ready yet (try $i/30). Retrying in 5s..."
+          sleep 5
+        fi
+      done
       echo "Running Maven tests..."
       echo "BASE_URL = $BASE_URL"
       mvn $MAVEN_CLI_OPTS test -Dsurefire.suiteXmlFiles=testng.xml
