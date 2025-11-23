@@ -34,7 +34,11 @@ ui_tests:
     - echo "Java version:" && java -version
     - echo "Maven version:" && mvn -v
 
-    # --- DB debug (non-fatal) ---
+    # 🔧 MySQL-Client nachinstallieren
+    - apt-get update
+    - apt-get install -y default-mysql-client curl
+
+    # DB-Check (non-fatal, nur Info)
     - echo "Check DB connectivity (non-fatal)..."
     - |
       set +e
@@ -46,12 +50,20 @@ ui_tests:
       echo "mysql exit code: $?"
       set -e
 
-    # --- ALWAYS run tests ---
+    #  Welche Seite liefert der App-Container?
+    - echo "Probe OrangeHRM homepage (headers + erste Zeilen)..."
+    - |
+      set +e
+      curl -sS -D- "$BASE_URL" | head -n 40
+      echo "curl exit code: $?"
+      set -e
+
     - echo "Running Maven tests..."
     - mvn $MAVEN_CLI_OPTS test -Dsurefire.suiteXmlFiles=testng.xml
 
     - echo "Tree after mvn test:"
     - ls -R
+    -
   artifacts:
     when: always
     expire_in: 14 days
