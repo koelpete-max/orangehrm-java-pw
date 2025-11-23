@@ -42,8 +42,10 @@ ui_tests:
     - echo "Installing mysql client + curl..."
     - apt-get update && apt-get install -y default-mysql-client curl
 
-    - echo "Create the same network you used locally"
-    - docker network create orange-net
+    - echo "Creating network"
+    - docker info
+    - docker network create orange-net || echo "network already exists"
+
 
     - echo "Start DB on that network"
     - docker run -d --name orangehrm-db --network orange-net \
