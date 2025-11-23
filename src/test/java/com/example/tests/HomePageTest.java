@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 
 public class HomePageTest extends BaseTest {
     @Test
-    public void VerifyHomePageTest() {
+    public void verifyHomePageTest() {
         testLog.step("Verifying Home Page Test");
         navigateToHomePage(baseUrl);
 
