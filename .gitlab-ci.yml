@@ -65,9 +65,10 @@ ui_tests:
           sleep 5
         fi
       done
-      echo "Running Maven tests..."
-      echo "BASE_URL = $BASE_URL"
-      mvn $MAVEN_CLI_OPTS test -Dsurefire.suiteXmlFiles=testng.xml
+
+    - echo "Running Maven tests..."
+    - echo "BASE_URL = $BASE_URL"
+    - mvn $MAVEN_CLI_OPTS test -Dsurefire.suiteXmlFiles=testng.xml
 
     - echo "Start OrangeHRM on the same network"
     - docker run -d --name orangehrm --network orange-net \
