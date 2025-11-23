@@ -34,6 +34,7 @@ ui_tests:
     - echo "Maven version:" && mvn -v
     - echo "Installing mysql client + curl..."
     - apt-get update && apt-get install -y default-mysql-client curl
+    - mysql -h orangehrm-db -u orangeuser -porangepass -e "SHOW DATABASES;"
     - echo "Checking DB connectivity to orangehrm-db:3306..."
     - |
       for i in $(seq 1 30); do
