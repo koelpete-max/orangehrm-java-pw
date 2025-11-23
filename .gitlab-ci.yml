@@ -38,10 +38,7 @@ ui_tests:
 
     # Simple one-line loop – no YAML block scalar
     - echo "Checking DB connectivity to orangehrm-db:3306 with mysql..."
-    -
-      for i in $(seq 1 30); do if mysql --protocol=tcp -horangehrm-db -P3306
-      -uorangeuser -porangepass -e "SHOW DATABASES;"; then echo "DB is reachable.";
-      break; fi; echo "DB not ready yet ($i/30)..."; sleep 5; done
+    - for i in $(seq 1 30); do if mysql --protocol=tcp -horangehrm-db -P3306 -uorangeuser -porangepass -e "SHOW DATABASES;"; then echo "DB is reachable."; break; fi; echo "DB not ready yet ($i/30)..."; sleep 5; done
 
     - echo "Checking BASE_URL: $BASE_URL"
     - 'curl -sS -D- "$BASE_URL" | head -n 20 || echo "BASE_URL not reachable"'
