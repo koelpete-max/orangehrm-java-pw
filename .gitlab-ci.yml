@@ -25,7 +25,7 @@ services:
       ORANGEHRM_DATABASE_USER: orangeuser
       ORANGEHRM_DATABASE_PASSWORD: orangepass
 
-uui_tests:
+ui_tests:
   stage: test
   script:
     - echo "PWD:" && pwd
