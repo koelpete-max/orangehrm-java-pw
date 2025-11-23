@@ -69,6 +69,7 @@ ui_tests:
     # 5) Show structure for debugging
     - echo "Verzeichnis-Struktur nach mvn test:"
     - ls -R
+
   artifacts:
     when: always
     expire_in: 14 days
