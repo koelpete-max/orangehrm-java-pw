@@ -72,7 +72,7 @@ ui_tests:
     - mvn $MAVEN_CLI_OPTS test -Dsurefire.suiteXmlFiles=testng.xml
 
     # 7) Debug: Tree
-    - echo "Tree after mvn test:"
+    - echo "Debug tree after mvn test:"
     - ls -R
 
   artifacts:
