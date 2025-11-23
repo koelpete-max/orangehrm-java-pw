@@ -29,23 +29,10 @@ ui_tests:
     - docker network create orange-net || echo "network already exists"
 
     # 4) Start DB in DinD
-    - docker run -d --name orangehrm-db --network orange-net \
-      -p 3306:3306 \
-      -e MARIADB_ROOT_PASSWORD=rootpass \
-      -e MARIADB_DATABASE=orangehrm \
-      -e MARIADB_USER=orangeuser \
-      -e MARIADB_PASSWORD=orangepass \
-      mariadb:11.3
+    - docker run -d --name orangehrm-db --network orange-net -p 3306:3306 -e MARIADB_ROOT_PASSWORD=rootpass -e MARIADB_DATABASE=orangehrm -e MARIADB_USER=orangeuser -e MARIADB_PASSWORD=orangepass mariadb:11.3
 
     # 5) Start OrangeHRM in DinD
-    - docker run -d --name orangehrm --network orange-net \
-      -p 8080:80 \
-      -e ORANGEHRM_DATABASE_HOST=orangehrm-db \
-      -e ORANGEHRM_DATABASE_PORT_NUMBER=3306 \
-      -e ORANGEHRM_DATABASE_NAME=orangehrm \
-      -e ORANGEHRM_DATABASE_USER=orangeuser \
-      -e ORANGEHRM_DATABASE_PASSWORD=orangepass \
-      orangehrm/orangehrm:5.7
+    - docker run -d --name orangehrm --network orange-net -p 8080:80 -e ORANGEHRM_DATABASE_HOST=orangehrm-db -e ORANGEHRM_DATABASE_PORT_NUMBER=3306 -e ORANGEHRM_DATABASE_NAME=orangehrm -e ORANGEHRM_DATABASE_USER=orangeuser -e ORANGEHRM_DATABASE_PASSWORD=orangepass orangehrm/orangehrm:5.7
 
     # 6) Wait for DB via the DinD alias "docker"
     - echo "Waiting for MariaDB..."
