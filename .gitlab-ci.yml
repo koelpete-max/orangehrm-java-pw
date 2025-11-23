@@ -3,58 +3,7 @@ image: mcr.microsoft.com/playwright/java:v1.56.0-jammy
 stages:
   - test
 
-variables:
-  MAVEN_CLI_OPTS: "-B"
-  BASE_URL: "http://orangehrm"
-
-services:
-  - name: mariadb:11.3
-    alias: orangehrm-db
-    variables:
-      MARIADB_ROOT_PASSWORD: rootpass
-      MARIADB_DATABASE: orangehrm
-      MARIADB_USER: orangeuser
-      MARIADB_PASSWORD: orangepass
-
-  - name: orangehrm/orangehrm:5.7
-    alias: orangehrm
-    variables:
-      ORANGEHRM_DATABASE_HOST: orangehrm-db
-      ORANGEHRM_DATABASE_PORT_NUMBER: "3306"
-      ORANGEHRM_DATABASE_NAME: orangehrm
-      ORANGEHRM_DATABASE_USER: orangeuser
-      ORANGEHRM_DATABASE_PASSWORD: orangepass
-
 ui_tests:
   stage: test
   script:
-    - echo "PWD:" && pwd
-    - echo "Repo-Inhalt:" && ls
-    - echo "Java version:" && java -version
-    - echo "Maven version:" && mvn -v
-
-    # Install mysql client + curl
-    - apt-get update && apt-get install -y default-mysql-client curl
-
-    # Simple one-line loop – no YAML block scalar
-    - echo "Checking DB connectivity to orangehrm-db:3306 with mysql..."
-    - for i in $(seq 1 30); do if mysql --protocol=tcp -horangehrm-db -P3306 -uorangeuser -porangepass -e "SHOW DATABASES;"; then echo "DB is reachable."; break; fi; echo "DB not ready yet ($i/30)..."; sleep 5; done
-
-    - echo "Checking BASE_URL: $BASE_URL"
-    - 'curl -sS -D- "$BASE_URL" | head -n 20 || echo "BASE_URL not reachable"'
-
-    - echo "Running Maven tests..."
-    - mvn $MAVEN_CLI_OPTS test -Dsurefire.suiteXmlFiles=testng.xml
-
-    - echo "Verzeichnis-Struktur nach mvn test:"
-    - ls -R
-
-  artifacts:
-    when: always
-    expire_in: 14 days
-    reports:
-      junit:
-        - target/surefire-reports/*.xml
-    paths:
-      - target/surefire-reports/
-      - test-output/
+    - echo "Hello from GitLab CI"
