@@ -46,7 +46,7 @@ uui_tests:
                  -P3306 \
                  -uorangeuser -porangepass \
                  -e "SHOW DATABASES;" ; then
-          echo "✅ DB is reachable."
+          echo "DB is reachable."
           break
         fi
         echo "⏳ DB not ready yet ($i/30)..."
@@ -57,9 +57,9 @@ uui_tests:
     - echo "Checking BASE_URL: $BASE_URL"
     - |
       if curl -sS -D- "$BASE_URL" | head -n 20; then
-        echo "✅ BASE_URL reachable."
+        echo "BASE_URL reachable."
       else
-        echo "❌ BASE_URL not reachable (curl failed, but tests will still run)."
+        echo "BASE_URL not reachable (curl failed, but tests will still run)."
       fi
 
     # 4) Run tests
