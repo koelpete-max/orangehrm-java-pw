@@ -16640,7 +16640,7 @@ CREATE TABLE `ohrm_login` (
   `user_role_predefined` tinyint(1) NOT NULL,
   `login_time` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=416 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=419 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -17064,7 +17064,10 @@ INSERT INTO `ohrm_login` VALUES
 (412,1,'Admin','Admin',1,'2025-11-18 17:36:26'),
 (413,1,'Admin','Admin',1,'2025-11-18 17:36:43'),
 (414,1,'Admin','Admin',1,'2025-11-18 17:36:47'),
-(415,1,'Admin','Admin',1,'2025-11-19 10:07:25');
+(415,1,'Admin','Admin',1,'2025-11-19 10:07:25'),
+(416,1,'Admin','Admin',1,'2025-11-21 22:08:24'),
+(417,1,'Admin','Admin',1,'2025-11-21 22:15:31'),
+(418,1,'Admin','Admin',1,'2025-11-21 22:16:56');
 /*!40000 ALTER TABLE `ohrm_login` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -18328,7 +18331,7 @@ CREATE TABLE `ohrm_registration_event_queue` (
   `publish_time` datetime DEFAULT NULL,
   `data` longtext DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -18339,7 +18342,9 @@ LOCK TABLES `ohrm_registration_event_queue` WRITE;
 /*!40000 ALTER TABLE `ohrm_registration_event_queue` DISABLE KEYS */;
 INSERT INTO `ohrm_registration_event_queue` VALUES
 (1,0,1,'2025-11-12 10:35:54','2025-11-12 10:35:54','{\"username\":\"Admin\",\"email\":\"testuser.crispy246@passmail.net\",\"telephone\":null,\"admin_first_name\":\"Bark\",\"admin_last_name\":\"Hokga\",\"timezone\":\"Not Captured\",\"language\":\"en_US\",\"country\":\"NL\",\"organization_name\":\"MxAll\",\"type\":\"0\",\"instance_identifier\":\"TXhBbGxfdGVzdHVzZXIuY3Jpc3B5MjQ2QHBhc3NtYWlsLm5ldF9CYXJrX0hva2dhX2xvY2FsaG9zdDo5MDgwX05MXzUuN18xNzYyOTQzNzU0\",\"system_details\":\"{\\\"os\\\":{\\\"os\\\":\\\"Linux\\\",\\\"release_name\\\":\\\"6.11.11-linuxkit\\\",\\\"version_info\\\":\\\"#1 SMP Wed Oct 22 09:37:46 UTC 2025\\\"},\\\"php\\\":{\\\"version\\\":\\\"8.3.9\\\"},\\\"mysql\\\":{\\\"client_version\\\":\\\"mysqlnd 8.3.9\\\",\\\"server_version\\\":\\\"11.3.2-MariaDB-1:11.3.2+maria~ubu2204\\\",\\\"conn_type\\\":\\\"orangehrm-db via TCP\\\\\\/IP\\\"},\\\"server\\\":\\\"Apache\\\\\\/2.4.59 (Debian)\\\",\\\"ohrm\\\":{\\\"version\\\":\\\"5.7\\\"}}\"}'),
-(2,3,1,'2025-11-12 10:36:04','2025-11-12 10:36:04','{\"instance_identifier\":\"TXhBbGxfdGVzdHVzZXIuY3Jpc3B5MjQ2QHBhc3NtYWlsLm5ldF9CYXJrX0hva2dhX2xvY2FsaG9zdDo5MDgwX05MXzUuN18xNzYyOTQzNzU0\",\"type\":3,\"system_details\":\"{\\\"os\\\":{\\\"os\\\":\\\"Linux\\\",\\\"release_name\\\":\\\"6.11.11-linuxkit\\\",\\\"version_info\\\":\\\"#1 SMP Wed Oct 22 09:37:46 UTC 2025\\\"},\\\"php\\\":{\\\"version\\\":\\\"8.3.9\\\"},\\\"mysql\\\":{\\\"client_version\\\":\\\"mysqlnd 8.3.9\\\",\\\"server_version\\\":\\\"11.3.2-MariaDB-1:11.3.2+maria~ubu2204\\\",\\\"conn_type\\\":\\\"orangehrm-db via TCP\\\\\\/IP\\\"},\\\"server\\\":\\\"Apache\\\\\\/2.4.59 (Debian)\\\",\\\"ohrm\\\":{\\\"version\\\":\\\"5.7\\\"}}\"}');
+(2,3,1,'2025-11-12 10:36:04','2025-11-12 10:36:04','{\"instance_identifier\":\"TXhBbGxfdGVzdHVzZXIuY3Jpc3B5MjQ2QHBhc3NtYWlsLm5ldF9CYXJrX0hva2dhX2xvY2FsaG9zdDo5MDgwX05MXzUuN18xNzYyOTQzNzU0\",\"type\":3,\"system_details\":\"{\\\"os\\\":{\\\"os\\\":\\\"Linux\\\",\\\"release_name\\\":\\\"6.11.11-linuxkit\\\",\\\"version_info\\\":\\\"#1 SMP Wed Oct 22 09:37:46 UTC 2025\\\"},\\\"php\\\":{\\\"version\\\":\\\"8.3.9\\\"},\\\"mysql\\\":{\\\"client_version\\\":\\\"mysqlnd 8.3.9\\\",\\\"server_version\\\":\\\"11.3.2-MariaDB-1:11.3.2+maria~ubu2204\\\",\\\"conn_type\\\":\\\"orangehrm-db via TCP\\\\\\/IP\\\"},\\\"server\\\":\\\"Apache\\\\\\/2.4.59 (Debian)\\\",\\\"ohrm\\\":{\\\"version\\\":\\\"5.7\\\"}}\"}'),
+(3,4,1,'2025-11-21 22:08:14','2025-11-21 22:08:14','{\"username\":\"Admin\",\"email\":\"testuser.crispy246@passmail.net\",\"telephone\":\"Not Captured\",\"admin_first_name\":\"Bark\",\"admin_last_name\":\"Hokga\",\"timezone\":\"Not Captured\",\"language\":\"en_US\",\"country\":\"NL\",\"organization_name\":\"MxAll\",\"type\":\"4\",\"instance_identifier\":\"TXhBbGxfdGVzdHVzZXIuY3Jpc3B5MjQ2QHBhc3NtYWlsLm5ldF9CYXJrX0hva2dhX2xvY2FsaG9zdDo5MDgwX05MXzUuN18xNzYyOTQzNzU0\",\"system_details\":\"{\\\"os\\\":{\\\"os\\\":\\\"Linux\\\",\\\"release_name\\\":\\\"6.11.11-linuxkit\\\",\\\"version_info\\\":\\\"#1 SMP Wed Oct 22 09:37:46 UTC 2025\\\"},\\\"php\\\":{\\\"version\\\":\\\"8.3.9\\\"},\\\"mysql\\\":{\\\"client_version\\\":\\\"mysqlnd 8.3.9\\\",\\\"server_version\\\":\\\"11.3.2-MariaDB-1:11.3.2+maria~ubu2204\\\",\\\"conn_type\\\":\\\"orangehrm-db via TCP\\\\\\/IP\\\"},\\\"server\\\":\\\"Apache\\\\\\/2.4.59 (Debian)\\\",\\\"ohrm\\\":{\\\"version\\\":\\\"5.7\\\"}}\"}'),
+(4,3,1,'2025-11-21 22:08:14','2025-11-21 22:08:14','{\"instance_identifier\":\"TXhBbGxfdGVzdHVzZXIuY3Jpc3B5MjQ2QHBhc3NtYWlsLm5ldF9CYXJrX0hva2dhX2xvY2FsaG9zdDo5MDgwX05MXzUuN18xNzYyOTQzNzU0\",\"type\":3,\"system_details\":\"{\\\"os\\\":{\\\"os\\\":\\\"Linux\\\",\\\"release_name\\\":\\\"6.11.11-linuxkit\\\",\\\"version_info\\\":\\\"#1 SMP Wed Oct 22 09:37:46 UTC 2025\\\"},\\\"php\\\":{\\\"version\\\":\\\"8.3.9\\\"},\\\"mysql\\\":{\\\"client_version\\\":\\\"mysqlnd 8.3.9\\\",\\\"server_version\\\":\\\"11.3.2-MariaDB-1:11.3.2+maria~ubu2204\\\",\\\"conn_type\\\":\\\"orangehrm-db via TCP\\\\\\/IP\\\"},\\\"server\\\":\\\"Apache\\\\\\/2.4.59 (Debian)\\\",\\\"ohrm\\\":{\\\"version\\\":\\\"5.7\\\"}}\"}');
 /*!40000 ALTER TABLE `ohrm_registration_event_queue` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -20705,4 +20710,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-20 12:44:50
+-- Dump completed on 2025-11-21 22:46:25

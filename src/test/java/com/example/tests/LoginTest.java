@@ -19,26 +19,26 @@ public class LoginTest extends BaseTest {
 
     @Test
     public void validCredentialsShouldGrantUserAccessToTheSystemTest() {
-        tlog.step("Checking login with valid credentials");
+        testLog.step("Checking login with valid credentials");
         loginPage.login(defaultTestUser.username(), defaultTestUser.password());
 
-        tlog.step("Asserting that user is logged in");
+        testLog.step("Asserting that user is logged in");
         Assert.assertEquals(topbarPanel.getPanelText(), TopbarPanelText.DASHBOARD.toString());
         Assert.assertEquals(sidePanel.getMenuActiveItemName(), SidePanelItem.DASHBOARD.toString());
 
-        tlog.step("User is logged in");
+        testLog.step("User is logged in");
     }
 
     @Test
     public void invalidCredentialsShouldNotAllowUserToAccessTheSystemTest() {
-        tlog.step("Login with invalid username and password");
+        testLog.step("Login with invalid username and password");
         loginPage.login(defaultTestUser.username(), "******");
 
-        tlog.step("Asserting that user is NOT logged in");
+        testLog.step("Asserting that user is NOT logged in");
         Assert.assertTrue(loginPage.isInvalidCredentialsMessageVisible(),
                 "Failed to prevent user to log in with invalid username and password");
 
-        tlog.step("User could NOT log in");
+        testLog.step("User could NOT log in");
     }
 
     @Test

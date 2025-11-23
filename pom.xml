@@ -94,11 +94,6 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
-<!--                    <useModulePath>false</useModulePath>-->
-<!--                    <includes>-->
-<!--                        <include>**/*Test.java</include>-->
-<!--&lt;!&ndash;                        <include>**/*IT.java</include>&ndash;&gt;-->
-<!--                    </includes>-->
                 </configuration>
             </plugin>
             <plugin>
