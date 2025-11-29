@@ -1,45 +1,34 @@
 package com.example.setup;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.example.utils.ScreenShotUtil;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
 import lombok.extern.slf4j.Slf4j;
 
-import java.nio.file.Paths;
-
 @Slf4j
 public class OrangeHrmSetupWizard {
 
     private OrangeHrmSetupWizard() {}
 
-    public static void runIfNeeded(Page page, ExtentTest test, ExtentReports extent) {
+    public static void runIfNeeded(Page page) {
 
         if (!page.locator("//img[@alt='orangehrm-branding']").isVisible()) {
             return;
         }
 
-        try {
-            log.info("Setup Wizard is there!!");
+        log.info("Setup Wizard is there!!");
 
-            var upgradeLocator = getUpgradeLocator(page);
-            checkOrangehrmStarterPage(page, upgradeLocator);
-            checkEncryptionPage(page);
-            checkSystemCheckPage(page);
-            checkCurrentVersionDetailsPage(page);
-            checkUpgradingOrangePage(page);
-            checkUpgradeCompletePage(page);
+        var upgradeLocator = getUpgradeLocator(page);
+        checkOrangehrmStarterPage(page, upgradeLocator);
+        checkEncryptionPage(page);
+        checkSystemCheckPage(page);
+        checkCurrentVersionDetailsPage(page);
+        checkUpgradingOrangePage(page);
+        checkUpgradeCompletePage(page);
 
-            log.info("OrangeHRM page is ready!!");
+        log.info("OrangeHRM page is ready!!");
 
-        } finally {
-            takeScreenshot(page, "OrangeHRM Setup", test);
-            extent.flush();
-            page.close();
-        }
     }
 
     private static Locator getUpgradeLocator(Page page) {
@@ -155,15 +144,5 @@ public class OrangeHrmSetupWizard {
             }
             return visible;
         });
-    }
-
-    private static void takeScreenshot(Page page, String screenshotText, ExtentTest test) {
-        String screenshotPath = ScreenShotUtil.takeScreenShot(page, screenshotText);
-        log.info("Screenshot stored at: {}", screenshotPath);
-
-        String fileName = Paths.get(screenshotPath).getFileName().toString();
-        String relativeToReport = "screenshots/" + fileName;
-
-        test.addScreenCaptureFromPath(relativeToReport, "screenshot");
     }
 }

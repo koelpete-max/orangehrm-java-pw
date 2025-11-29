@@ -1,6 +1,6 @@
 package com.example.utils;
 
-import com.example.base.BaseTest;
+import com.example.base.TestUser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +32,10 @@ public class TestUserProvider {
         }
     }
 
-    public static BaseTest.TestUser getDefaultAdmin() throws IOException {
+    public static TestUser getDefaultAdmin() throws IOException {
         init();
         JsonNode adminNode = root.get("Admin");
-        var user = new BaseTest.TestUser(
+        var user = new TestUser(
                 adminNode.get("username").asText(),
                 adminNode.get("password").asText()
         );

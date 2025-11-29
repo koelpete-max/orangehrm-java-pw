@@ -23,8 +23,16 @@ public class LoginTest extends BaseTest {
         loginPage.login(defaultTestUser.username(), defaultTestUser.password());
 
         testLog.step("Asserting that user is logged in");
-        Assert.assertEquals(topbarPanel.getPanelText(), TopbarPanelText.DASHBOARD.toString());
-        Assert.assertEquals(sidePanel.getMenuActiveItemName(), SidePanelItem.DASHBOARD.toString());
+        Assert.assertEquals(
+                topbarPanel.getPanelText(),
+                TopbarPanelText.DASHBOARD.toString(),
+                "Topbar should show 'Dashboard' after successful login"
+        );
+        Assert.assertEquals(
+                sidePanel.getMenuActiveItemName(),
+                SidePanelItem.DASHBOARD.toString(),
+                "Side panel should show 'Dashboard' after successful login"
+        );
 
         testLog.step("User is logged in");
     }
@@ -43,7 +51,6 @@ public class LoginTest extends BaseTest {
 
     @Test
     public void loginTestShouldBeSkipped() {
-        test.skip("Skipping login test 3");
         throw new SkipException("Skipping this test");
     }
 }

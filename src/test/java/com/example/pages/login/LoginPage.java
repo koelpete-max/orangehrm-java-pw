@@ -46,13 +46,9 @@ public class LoginPage {
     }
 
     public boolean isInvalidCredentialsMessageVisible() {
-        final boolean[] visible = new boolean[1];
-        page.waitForCondition(() -> {
-            visible[0] = invalidCredentialsClassNameLocator.isVisible();
-            return visible[0];
-        });
-
-        log.info("Checking if invalid credentials message is visible: {}", visible[0]);
-        return visible[0];
+        page.waitForCondition(() -> invalidCredentialsClassNameLocator.isVisible());
+        boolean visible = invalidCredentialsClassNameLocator.isVisible();
+        log.info("Checking if invalid credentials message is visible: {}", visible);
+        return visible;
     }
 }
