@@ -14,7 +14,7 @@ public class LoginTest extends BaseTest {
 
     @BeforeMethod
     public void startPage() {
-        navigateToHomePage(baseUrl);
+        navigateToHomePage(BASE_URL);
     }
 
     @Test

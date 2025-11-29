@@ -13,7 +13,7 @@ public class AdminPageTest extends BaseTest {
 
     @BeforeMethod
     public void loginToPage() {
-        navigateToHomePage(baseUrl);
+        navigateToHomePage(BASE_URL);
         loginPage.login(defaultTestUser.username(), defaultTestUser.password());
     }
 

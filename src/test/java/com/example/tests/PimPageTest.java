@@ -16,7 +16,7 @@ public class PimPageTest extends BaseTest {
 
     @BeforeMethod
     public void navigateToHomePage() {
-        navigateToHomePage(baseUrl);
+        navigateToHomePage(BASE_URL);
         loginPage.login(defaultTestUser.username(), defaultTestUser.password());
         sidePanel.selectMenuActiveItem(SidePanelItem.PIM);
         topbarStaticText = topbarPanel.getPanelText();

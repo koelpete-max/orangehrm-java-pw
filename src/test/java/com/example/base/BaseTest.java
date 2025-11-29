@@ -1,5 +1,6 @@
 package com.example.base;
 
+import com.example.core.TestContext;
 import com.example.di.DaggerTestComponent;
 import com.example.di.TestComponent;
 import com.aventstack.extentreports.ExtentReports;
@@ -15,7 +16,6 @@ import com.example.reporting.TestLogger;
 import com.example.utils.ExtentManager;
 import com.example.utils.ScreenShotUtil;
 import com.example.utils.EnvConfig;
-import com.example.utils.TestUserProvider;
 import com.example.setup.OrangeHrmSetupWizard;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.LoadState;
@@ -34,6 +34,7 @@ import java.util.Arrays;
 public class BaseTest {
 
     protected TestComponent di;
+    protected TestContext testContext;
 
     protected ExtentReports extent;
     protected ExtentTest test;
@@ -51,29 +52,31 @@ public class BaseTest {
     protected Browser browser;
     protected Page page;
 
-    protected String baseUrl;
+    protected static final String BASE_URL = EnvConfig.resolveBaseUrl();
     protected TestUser defaultTestUser;
 
     @BeforeSuite
     public void beforeSuite() {
         log.info("Setting up Test Suite");
 
-        baseUrl = EnvConfig.resolveBaseUrl();
         extent = ExtentManager.getInstance();
 
+        boolean headless = Boolean.parseBoolean(
+                System.getenv().getOrDefault("HEADLESS", "false")
+        );
         try (Playwright pw = Playwright.create()) {
             Browser tmpBrowser = pw.chromium().launch(
                     new BrowserType.LaunchOptions()
                             .setArgs(Arrays.asList("--start-maximized"))
-                            .setHeadless(false)
+                            .setHeadless(headless)
             );
             Page tmpPage = tmpBrowser.newPage();
 
             ExtentTest suiteTest = extent.createTest("suiteSetup");
             TestLogger suiteLog = new TestLogger(suiteTest);
 
-            suiteLog.step("Navigate to Base URL: " + baseUrl);
-            tmpPage.navigate(baseUrl);
+            suiteLog.step("Navigate to Base URL: " + BASE_URL);
+            tmpPage.navigate(BASE_URL);
             tmpPage.waitForLoadState(LoadState.DOMCONTENTLOADED);
             tmpPage.waitForLoadState(LoadState.NETWORKIDLE);
 
@@ -89,22 +92,16 @@ public class BaseTest {
     @BeforeMethod
     public void setUpTest(Method method) throws IOException {
 
-        log.info("Starting Test: {}", method.getName());
+        di = DaggerTestComponent.factory().create();
 
-        baseUrl = EnvConfig.resolveBaseUrl();
+        testContext = di.testContext();
 
-        boolean headless = Boolean.parseBoolean(System.getenv().getOrDefault("HEADLESS", "false"));
+        this.playwright = testContext.getPlaywright();
+        this.browser = testContext.getBrowser();
+        this.page = testContext.getPage();
+        this.defaultTestUser = testContext.getDefaultTestUser();
 
-        playwright = Playwright.create();
-        browser = playwright.chromium().launch(
-                new BrowserType.LaunchOptions()
-                        .setArgs(Arrays.asList("--start-maximized"))
-                        .setHeadless(headless)
-        );
-        page = browser.newPage();
-
-        // DI / Pages
-        di = DaggerTestComponent.factory().create(page);
+        // Pages
         homePage = di.homePage();
         loginPage = di.loginPage();
         adminPage = di.adminPage();
@@ -113,10 +110,6 @@ public class BaseTest {
         sidePanel = di.sidePanel();
         topbarPanel = di.topbarPanel();
 
-        // Config & User
-        defaultTestUser = TestUserProvider.getDefaultAdmin();
-
-        // Reporting
         extent = ExtentManager.getInstance();
         test = extent.createTest(method.getName());
         testLog = new TestLogger(test);
@@ -137,13 +130,9 @@ public class BaseTest {
             }
             extent.flush();
         } finally {
-            if (browser != null) {
-                log.info("Closing Browser");
-                browser.close();
-            }
-            if (playwright != null) {
-                log.info("Closing Playwright");
-                playwright.close();
+            if (testContext != null) {
+                log.info("Closing TestContext resources");
+                testContext.close();
             }
         }
     }

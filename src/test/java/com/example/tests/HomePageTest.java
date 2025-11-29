@@ -8,7 +8,7 @@ public class HomePageTest extends BaseTest {
     @Test
     public void verifyHomePageTest() {
         testLog.step("Verifying Home Page Test");
-        navigateToHomePage(baseUrl);
+        navigateToHomePage(BASE_URL);
 
         testLog.step("Asserting that the page is loaded");
         Assert.assertTrue(

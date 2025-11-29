@@ -32,14 +32,20 @@ public class TestUserProvider {
         }
     }
 
-    public static TestUser getDefaultAdmin() throws IOException {
-        init();
-        JsonNode adminNode = root.get("Admin");
-        var user = new TestUser(
-                adminNode.get("username").asText(),
-                adminNode.get("password").asText()
-        );
-        log.info("Default TestUser: '{}'", user.username());
-        return user;
+    public static TestUser getDefaultAdmin() {
+
+        try {
+            init();
+            JsonNode adminNode = root.get("Admin");
+            var user = new TestUser(
+                    adminNode.get("username").asText(),
+                    adminNode.get("password").asText()
+            );
+            log.info("Default TestUser: '{}'", user.username());
+            return user;
+        } catch (IOException e) {
+            log.error("Error reading test-users.json", e);
+            return null;
+        }
     }
 }
