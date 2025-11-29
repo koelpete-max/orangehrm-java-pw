@@ -1,5 +1,6 @@
 package com.example.setup;
 
+import com.example.utils.ScreenShotUtil;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
@@ -9,25 +10,35 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class OrangeHrmSetupWizard {
 
+    private static String screenshotPath;
+
+    private static final String TEST_NAME = "BeforeSuite";
+
     private OrangeHrmSetupWizard() {}
 
-    public static void runIfNeeded(Page page) {
+    public static String runIfNeededReturnScreenshot(Page page) {
 
         if (!page.locator("//img[@alt='orangehrm-branding']").isVisible()) {
-            return;
+            return ScreenShotUtil.takeScreenShot(page, TEST_NAME);
         }
 
         log.info("Setup Wizard is there!!");
 
-        var upgradeLocator = getUpgradeLocator(page);
-        checkOrangehrmStarterPage(page, upgradeLocator);
-        checkEncryptionPage(page);
-        checkSystemCheckPage(page);
-        checkCurrentVersionDetailsPage(page);
-        checkUpgradingOrangePage(page);
-        checkUpgradeCompletePage(page);
+        try {
+            var upgradeLocator = getUpgradeLocator(page);
+            screenshotPath = ScreenShotUtil.takeScreenShot(page, TEST_NAME);
+            checkOrangehrmStarterPage(page, upgradeLocator);
+            checkEncryptionPage(page);
+            checkSystemCheckPage(page);
+            checkCurrentVersionDetailsPage(page);
+            checkUpgradingOrangePage(page);
+            checkUpgradeCompletePage(page);
 
-        log.info("OrangeHRM page is ready!!");
+            log.info("OrangeHRM page is ready!!");
+        }
+        finally {
+            return screenshotPath;
+        }
 
     }
 
@@ -38,7 +49,8 @@ public class OrangeHrmSetupWizard {
                         .setHasText("Upgrading an Existing"))
                 .locator("span");
         if (!upgradeLocator.isVisible()) {
-            throw new IllegalStateException("Setup Wizard is not there");
+            screenshotPath = ScreenShotUtil.takeScreenShot(page, TEST_NAME);
+            throw new IllegalStateException(TEST_NAME);
         }
         return upgradeLocator;
     }
@@ -59,7 +71,8 @@ public class OrangeHrmSetupWizard {
             return page.getByRole(AriaRole.TEXTBOX).first().isVisible();
         });
         if (!page.getByRole(AriaRole.HEADING).textContent().contains("Database Information".trim())) {
-            throw new IllegalStateException("Welcome to OrangeHRM Starter page failed");
+            screenshotPath = ScreenShotUtil.takeScreenShot(page, TEST_NAME);
+            throw new IllegalStateException(TEST_NAME);
         }
     }
 
@@ -79,7 +92,8 @@ public class OrangeHrmSetupWizard {
             return success;
         });
         if (!page.getByRole(AriaRole.HEADING).textContent().contains("System Check".trim())) {
-            throw new IllegalStateException("ENCRYPTION page failed");
+            screenshotPath = ScreenShotUtil.takeScreenShot(page, TEST_NAME);
+            throw new IllegalStateException(TEST_NAME);
         }
     }
 
@@ -89,7 +103,8 @@ public class OrangeHrmSetupWizard {
         waitForPageCondition(page, "Next", "==> Button next page System is ready");
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Next")).click();
         if (!page.getByRole(AriaRole.HEADING).textContent().contains("Current Version Details")) {
-            throw new IllegalStateException("System Check page failed");
+            screenshotPath = ScreenShotUtil.takeScreenShot(page, TEST_NAME);
+            throw new IllegalStateException(TEST_NAME);
         }
     }
 
@@ -104,22 +119,28 @@ public class OrangeHrmSetupWizard {
 
         waitForPageCondition(page, "Upgrading OrangeHRM", "==> Upgrading OrangeHRM is ready");
         if (!page.getByText("Upgrading OrangeHRM").isVisible()) {
-            throw new IllegalStateException("Current Version Details page failed");
+            screenshotPath = ScreenShotUtil.takeScreenShot(page, TEST_NAME);
+            throw new IllegalStateException(TEST_NAME);
         }
 
     }
 
     private static void checkUpgradingOrangePage(Page page) {
 
+        final var TEST_NAME = "Upgrading OrangeHRM page failed";
+
         log.info("==> Upgrading OrangeHRM");
         waitForPageCondition(page, "Next", "==> 100% bar ready");
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Next")).click();
         if (!page.getByRole(AriaRole.HEADING).textContent().contains("Upgrade Complete")) {
-            throw new IllegalStateException("Upgrading OrangeHRM page failed");
+            screenshotPath = ScreenShotUtil.takeScreenShot(page, TEST_NAME);
+            throw new IllegalStateException(TEST_NAME);
         }
     }
 
     private static void checkUpgradeCompletePage(Page page) {
+
+        final var TEST_NAME = "Upgrade Complete page failed";
 
         log.info("==> Upgrade Complete");
         waitForPageCondition(page, "Launch OrangeHRM", "==> Launch OrangeHRM button is ready");
@@ -132,7 +153,8 @@ public class OrangeHrmSetupWizard {
         page.waitForLoadState(LoadState.DOMCONTENTLOADED);
         page.waitForLoadState(LoadState.NETWORKIDLE);
         if (!page.locator("//img[@alt='company-branding']").isVisible()) {
-            throw new IllegalStateException("Upgrade Complete page failed");
+            screenshotPath = ScreenShotUtil.takeScreenShot(page, TEST_NAME);
+            throw new IllegalStateException(TEST_NAME);
         }
     }
 

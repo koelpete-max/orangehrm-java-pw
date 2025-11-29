@@ -12,6 +12,7 @@ import com.example.pages.main.SidePanel;
 import com.example.pages.main.TopbarPanel;
 import com.example.pages.main.admin.AdminPage;
 import com.example.pages.main.pim.PimPage;
+import com.example.reporting.ReportManager;
 import com.example.reporting.TestLogger;
 import com.example.utils.ExtentManager;
 import com.example.utils.ScreenShotUtil;
@@ -56,7 +57,7 @@ public class BaseTest {
     protected TestUser defaultTestUser;
 
     @BeforeSuite
-    public void beforeSuite() {
+    public void setUpSuite() {
         log.info("Setting up Test Suite");
 
         extent = ExtentManager.getInstance();
@@ -83,9 +84,9 @@ public class BaseTest {
             tmpPage.waitForLoadState(LoadState.DOMCONTENTLOADED);
             tmpPage.waitForLoadState(LoadState.NETWORKIDLE);
 
-            OrangeHrmSetupWizard.runIfNeeded(tmpPage);
+            var screenshotPath = OrangeHrmSetupWizard.runIfNeededReturnScreenshot(tmpPage);
 
-            takeScreenshot(tmpPage, suiteTest, "suiteSetup");
+            takeScreenshot(tmpPage, screenshotPath, suiteTest, "suiteSetup");
             suiteLog.step("Closing Browser");
             tmpBrowser.close();
             extent.flush();
@@ -113,15 +114,16 @@ public class BaseTest {
         sidePanel = di.sidePanel();
         topbarPanel = di.topbarPanel();
 
-        extent = ExtentManager.getInstance();
-        test = extent.createTest(method.getName());
+        // Reporting
+        ReportManager.startTest(method.getName());
+        test = ReportManager.getTest();
         testLog = new TestLogger(test);
 
         log.info("Test '{}' started", method.getName());
     }
 
     @AfterMethod
-    public void tearDownTest(ITestResult result) {
+    public void afterAnyTest(ITestResult result) {
         try {
             if (result.getStatus() == ITestResult.FAILURE) {
                 takeScreenshot(page, test, result.getName());
@@ -131,7 +133,7 @@ public class BaseTest {
             } else {
                 test.skip("Test SKIPPED");
             }
-            extent.flush();
+            ReportManager.flush();
         } finally {
             if (testContext != null) {
                 log.info("Closing TestContext resources");
@@ -145,13 +147,21 @@ public class BaseTest {
     // =========================
     private void takeScreenshot(Page page, ExtentTest test, String screenshotText) {
         String screenshotPath = ScreenShotUtil.takeScreenShot(page, screenshotText);
+        takeScreenshot(page, screenshotPath, test, screenshotText);
+    }
+
+    private void takeScreenshot(Page page,
+                                String screenshotPath,
+                                ExtentTest test,
+                                String screenshotText) {
         log.info("Screenshot stored at: {}", screenshotPath);
 
         String fileName = Paths.get(screenshotPath).getFileName().toString();
         String relativeToReport = "screenshots/" + fileName;
 
-        test.addScreenCaptureFromPath(relativeToReport, "screenshot");
+        test.addScreenCaptureFromPath(relativeToReport, screenshotText);
     }
+
 
     protected void navigateToHomePage(String url) {
         loginPage = homePage.navigateTo(url);
