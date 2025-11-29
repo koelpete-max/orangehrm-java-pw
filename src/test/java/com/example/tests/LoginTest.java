@@ -26,8 +26,7 @@ public class LoginTest extends BaseTest {
     public Object[][] userRoleData() {
 
         return new Object[][] {
-                { TestUserProvider.getUser(TestUserProvider.ADMIN_TYPE_USER) },
-//                { TestUserProvider.getUser(TestUserProvider.HACKER_TYPE_USER)}
+                { TestUserProvider.getUser(TestUserProvider.ADMIN_TYPE_USER) }
         };
     }
 
