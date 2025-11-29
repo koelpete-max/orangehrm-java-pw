@@ -16,6 +16,7 @@ public class PimPageTest extends BaseTest {
 
     @BeforeMethod
     public void navigateToHomePage() {
+
         navigateToHomePage(BASE_URL);
         loginPage.login(defaultTestUser.username(), defaultTestUser.password());
         sidePanel.selectMenuActiveItem(SidePanelItem.PIM);
@@ -24,6 +25,7 @@ public class PimPageTest extends BaseTest {
 
     @DataProvider(name = "expectedEmployeeData")
     public Object[][] expectedEmployeeData() {
+
         return new Object[][] {
             { new EmployeeData("0001", "Bark", "Hokga",  "") },
             { new EmployeeData("0002", "Schuurk Be", "Bolk",  "") },
@@ -32,18 +34,19 @@ public class PimPageTest extends BaseTest {
 
     @Test(dataProvider = "expectedEmployeeData")
     public void employeeInformationTest(EmployeeData expectedEmployeeData) throws Exception {
+
         testLog.step("Verifying employee information Test");
         if (!Objects.equals(topbarStaticText, TopbarPanelText.PIM.toString())) {
             throw new Exception("PIM Panel not visible");
         }
 
         testLog.step("Searching employee information for "+
-                expectedEmployeeData.getFirstMiddleName()+ " " +expectedEmployeeData.getLastName() +
-                ", id="+expectedEmployeeData.getId()
+                expectedEmployeeData.firstMiddleName()+ " " +expectedEmployeeData.lastName() +
+                ", id="+expectedEmployeeData.id()
         );
 
         testLog.step("Asserting employee information");
-        var employeeData = pimPage.searchEmployeeByName(expectedEmployeeData.getFirstMiddleName());
+        var employeeData = pimPage.searchEmployeeByName(expectedEmployeeData.firstMiddleName());
         Assert.assertNotNull(employeeData, "Employee data not found");
         Assert.assertEquals(expectedEmployeeData, employeeData, "Employee data not match");
 

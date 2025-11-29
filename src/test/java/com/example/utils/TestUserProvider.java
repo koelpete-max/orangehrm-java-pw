@@ -14,6 +14,12 @@ public class TestUserProvider {
     private static JsonNode root;
     private static final Object lock = new Object();
 
+    private final static String usernameText = "username";
+    private final static String passwordText = "password";
+
+    public final static String ADMIN_TYPE_USER = "ADMIN";
+    public final static String HACKER_TYPE_USER = "HACKER";
+
     private static void init() throws IOException {
         if (root == null) {
             synchronized (lock) {
@@ -32,14 +38,18 @@ public class TestUserProvider {
         }
     }
 
-    public static TestUser getDefaultAdmin() {
+    public static TestUser getDefaultUser() {
+        return getUser(ADMIN_TYPE_USER);
+    }
+
+    public static TestUser getUser(String username) {
 
         try {
             init();
-            JsonNode adminNode = root.get("Admin");
+            JsonNode adminNode = root.get(username);
             var user = new TestUser(
-                    adminNode.get("username").asText(),
-                    adminNode.get("password").asText()
+                    adminNode.get(usernameText).asText(),
+                    adminNode.get(passwordText).asText()
             );
             log.info("Default TestUser: '{}'", user.username());
             return user;

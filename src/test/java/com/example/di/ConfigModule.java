@@ -8,7 +8,6 @@ import dagger.Provides;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
-import java.io.IOException;
 
 @Module
 public class ConfigModule {
@@ -23,6 +22,6 @@ public class ConfigModule {
     @Provides
     @Singleton
     TestUser provideDefaultTestUser()  {
-        return TestUserProvider.getDefaultAdmin();
+        return TestUserProvider.getDefaultUser();
     }
 }

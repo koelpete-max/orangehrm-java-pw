@@ -3,7 +3,7 @@ package com.example.base;
 import com.example.core.TestContext;
 import com.example.di.DaggerTestComponent;
 import com.example.di.TestComponent;
-import com.aventstack.extentreports.ExtentReports;
+import com.example.reporting.ReportManager;
 import com.aventstack.extentreports.ExtentTest;
 import com.example.pages.main.dashboard.DashboardPage;
 import com.example.pages.home.HomePage;
@@ -12,9 +12,7 @@ import com.example.pages.main.SidePanel;
 import com.example.pages.main.TopbarPanel;
 import com.example.pages.main.admin.AdminPage;
 import com.example.pages.main.pim.PimPage;
-import com.example.reporting.ReportManager;
 import com.example.reporting.TestLogger;
-import com.example.utils.ExtentManager;
 import com.example.utils.ScreenShotUtil;
 import com.example.utils.EnvConfig;
 import com.example.setup.OrangeHrmSetupWizard;
@@ -37,8 +35,7 @@ public class BaseTest {
     protected TestComponent di;
     protected TestContext testContext;
 
-    protected ExtentReports extent;
-    protected ExtentTest test;
+   protected ExtentTest test;
     protected TestLogger testLog;
 
     protected HomePage homePage;
@@ -57,26 +54,22 @@ public class BaseTest {
     protected TestUser defaultTestUser;
 
     @BeforeSuite
-    public void setUpSuite() {
+    public void beforeSuite() {
+
+        final String testName = "suiteSetup";
+
         log.info("Setting up Test Suite");
 
-        extent = ExtentManager.getInstance();
-
-        boolean headless = Boolean.parseBoolean(
-                System.getenv().getOrDefault(
-                        "HEADLESS",
-                        "false"
-                )
-        );
         try (Playwright pw = Playwright.create()) {
             Browser tmpBrowser = pw.chromium().launch(
                     new BrowserType.LaunchOptions()
                             .setArgs(Arrays.asList("--start-maximized"))
-                            .setHeadless(headless)
+                            .setHeadless(false)
             );
             Page tmpPage = tmpBrowser.newPage();
 
-            ExtentTest suiteTest = extent.createTest("suiteSetup");
+            ReportManager.startTest(testName);
+            ExtentTest suiteTest = ReportManager.getTest();
             TestLogger suiteLog = new TestLogger(suiteTest);
 
             suiteLog.step("Navigate to Base URL: " + BASE_URL);
@@ -86,10 +79,10 @@ public class BaseTest {
 
             var screenshotPath = OrangeHrmSetupWizard.runIfNeededReturnScreenshot(tmpPage);
 
-            takeScreenshot(tmpPage, screenshotPath, suiteTest, "suiteSetup");
+            takeScreenshot(tmpPage, screenshotPath, suiteTest, testName);
             suiteLog.step("Closing Browser");
             tmpBrowser.close();
-            extent.flush();
+            ReportManager.flush();
         }
     }
 
@@ -105,7 +98,6 @@ public class BaseTest {
         this.page = testContext.getPage();
         this.defaultTestUser = testContext.getDefaultTestUser();
 
-        // Pages
         homePage = di.homePage();
         loginPage = di.loginPage();
         adminPage = di.adminPage();
@@ -114,7 +106,6 @@ public class BaseTest {
         sidePanel = di.sidePanel();
         topbarPanel = di.topbarPanel();
 
-        // Reporting
         ReportManager.startTest(method.getName());
         test = ReportManager.getTest();
         testLog = new TestLogger(test);
@@ -124,6 +115,7 @@ public class BaseTest {
 
     @AfterMethod
     public void afterAnyTest(ITestResult result) {
+
         try {
             if (result.getStatus() == ITestResult.FAILURE) {
                 takeScreenshot(page, test, result.getName());
@@ -146,6 +138,7 @@ public class BaseTest {
     //   Helpers
     // =========================
     private void takeScreenshot(Page page, ExtentTest test, String screenshotText) {
+
         String screenshotPath = ScreenShotUtil.takeScreenShot(page, screenshotText);
         takeScreenshot(page, screenshotPath, test, screenshotText);
     }
@@ -154,6 +147,7 @@ public class BaseTest {
                                 String screenshotPath,
                                 ExtentTest test,
                                 String screenshotText) {
+
         log.info("Screenshot stored at: {}", screenshotPath);
 
         String fileName = Paths.get(screenshotPath).getFileName().toString();
@@ -164,6 +158,7 @@ public class BaseTest {
 
 
     protected void navigateToHomePage(String url) {
+
         loginPage = homePage.navigateTo(url);
     }
 

@@ -1,25 +1,11 @@
 package com.example.pages.main.pim;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
-@Getter
 @Slf4j
-public class EmployeeData {
-
-    private final String id;
-    private final String firstMiddleName;
-    private final String lastName;
-    private final String jobTitle;
-
-    public EmployeeData(String id, String firstMiddleName, String lastName, String jobTitle) {
-        this.id = id;
-        this.firstMiddleName = firstMiddleName;
-        this.lastName = lastName;
-        this.jobTitle = jobTitle;
-    }
+public record EmployeeData(String id, String firstMiddleName, String lastName, String jobTitle) {
 
     @Override
     public boolean equals(Object o) {

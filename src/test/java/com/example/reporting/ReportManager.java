@@ -1,4 +1,3 @@
-// com/example/reporting/ReportManager.java
 package com.example.reporting;
 
 import com.aventstack.extentreports.ExtentReports;
