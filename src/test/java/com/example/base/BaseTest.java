@@ -23,6 +23,7 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Listeners;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -30,6 +31,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 
 @Slf4j
+@Listeners(com.example.reporting.ExtentTestNgListener.class)
 public class BaseTest {
 
     protected TestComponent di;
@@ -117,18 +119,9 @@ public class BaseTest {
     public void afterAnyTest(ITestResult result) {
 
         try {
-            if (result.getStatus() == ITestResult.FAILURE) {
-                takeScreenshot(page, test, result.getName());
-                test.fail(result.getThrowable());
-            } else if (result.getStatus() == ITestResult.SUCCESS) {
-                test.pass("Test PASSED");
-            } else {
-                test.skip("Test SKIPPED");
-            }
             ReportManager.flush();
         } finally {
             if (testContext != null) {
-                log.info("Closing TestContext resources");
                 testContext.close();
             }
         }
@@ -137,6 +130,10 @@ public class BaseTest {
     // =========================
     //   Helpers
     // =========================
+    public String captureScreenshotForListener(String name) {
+        return ScreenShotUtil.takeScreenShot(page, name);
+    }
+
     private void takeScreenshot(Page page, ExtentTest test, String screenshotText) {
 
         String screenshotPath = ScreenShotUtil.takeScreenShot(page, screenshotText);

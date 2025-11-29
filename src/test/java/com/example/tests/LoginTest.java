@@ -26,7 +26,8 @@ public class LoginTest extends BaseTest {
     public Object[][] userRoleData() {
 
         return new Object[][] {
-                { TestUserProvider.getDefaultUser() }
+                { TestUserProvider.getUser(TestUserProvider.ADMIN_TYPE_USER) },
+//                { TestUserProvider.getUser(TestUserProvider.HACKER_TYPE_USER)}
         };
     }
 
@@ -36,6 +37,9 @@ public class LoginTest extends BaseTest {
 
         testLog.step("Checking login with valid credentials");
         loginPage.login(user.username(), user.password());
+
+        Assert.assertFalse(loginPage.isInvalidCredentialsMessageVisible(3000),
+                "Failed to log in with username '" + user.username() +"'");
 
         testLog.step("Asserting that user is logged in");
         Assert.assertEquals(

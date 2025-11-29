@@ -15,6 +15,8 @@ public class LoginPage {
     private final Locator loginButtonLocator;
     private final Locator invalidCredentialsClassNameLocator;
 
+    private final double defaultTimeout = 10_000;
+
     @Inject
     public LoginPage(Page page) {
         this.page = page;
@@ -46,9 +48,16 @@ public class LoginPage {
     }
 
     public boolean isInvalidCredentialsMessageVisible() {
+        return isInvalidCredentialsMessageVisible(defaultTimeout);
+    }
+
+    public boolean isInvalidCredentialsMessageVisible(double timeout) {
+
+        page.setDefaultTimeout(timeout);
         page.waitForCondition(() -> invalidCredentialsClassNameLocator.isVisible());
         boolean visible = invalidCredentialsClassNameLocator.isVisible();
         log.info("Checking if invalid credentials message is visible: {}", visible);
+        page.setDefaultTimeout(defaultTimeout);
         return visible;
     }
 }
