@@ -1,6 +1,5 @@
 package com.example.base;
 
-
 import com.example.di.DaggerTestComponent;
 import com.example.di.TestComponent;
 import com.aventstack.extentreports.ExtentReports;
@@ -13,13 +12,14 @@ import com.example.pages.main.TopbarPanel;
 import com.example.pages.main.admin.AdminPage;
 import com.example.pages.main.pim.PimPage;
 import com.example.reporting.TestLogger;
+import com.example.setup.OrangeHrmSetupWizard;
+import com.example.utils.EnvConfig;
 import com.example.utils.ExtentManager;
 import com.example.utils.ScreenShotUtil;
 import com.example.utils.TestConfig;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.playwright.*;
-import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.ITestResult;
@@ -56,26 +56,24 @@ public class BaseTest {
 
     protected String baseUrl;
 
-    protected TestUser defaultTestUser;
+    public TestUser defaultTestUser;
 
     @BeforeSuite
     public void setupSuite() {
         log.info("Setting up Test Suite");
+
+        baseUrl = EnvConfig.resolveBaseUrl();
+        extent = ExtentManager.getInstance();
+
         playwright = Playwright.create();
         browser = playwright.chromium().launch(
                 new BrowserType.LaunchOptions()
                         .setArgs(Arrays.asList("--start-maximized"))
-                        .setHeadless(true)
+                        .setHeadless(false)
         );
         page = browser.newPage();
 
-        baseUrl = System.getenv("BASE_URL");
-        baseUrl = (baseUrl == null || baseUrl.isBlank()) ? TestConfig.get("BASE_URL") : baseUrl;
-        if (baseUrl == null || baseUrl.isBlank()) {
-            throw new IllegalStateException("BASE_URL is not set");
-        }
 
-        extent = ExtentManager.getInstance();
         test = extent.createTest("beforeSuite");
         testLog = new TestLogger(test);
 
@@ -83,17 +81,8 @@ public class BaseTest {
         page.navigate(baseUrl);
         page.waitForLoadState(LoadState.DOMCONTENTLOADED);
         page.waitForLoadState(LoadState.NETWORKIDLE);
-        try {
-            if (page.locator("//img[@alt='orangehrm-branding']").isVisible()) {
-                log.info("Setup Wizard is there!!");
-                goThroughSetupWizard();
-            }
-        } finally {
-            takeScreenshot("beforeSuite");
-            extent.flush();
-            testLog.step("Closing Browser");
-            browser.close();
-        }
+
+        OrangeHrmSetupWizard.runIfNeeded(page,test,extent);
     }
 
     @BeforeMethod
@@ -103,7 +92,7 @@ public class BaseTest {
         browser = playwright.chromium().launch(
                 new BrowserType.LaunchOptions()
                         .setArgs(Arrays.asList("--start-maximized"))
-                        .setHeadless(true)
+                        .setHeadless(false)
         );
         page = browser.newPage();
 
@@ -170,110 +159,7 @@ public class BaseTest {
         loginPage = homePage.navigateTo(url);
     }
 
-    private void goThroughSetupWizard() {
-
-        // Welcome to OrangeHRM Starter
-        var upgradeLocator = page.locator("label")
-                .filter(new Locator.FilterOptions()
-                        .setHasText("Upgrading an Existing"))
-                .locator("span");
-        if (!upgradeLocator.isVisible()) {
-            return;
-        }
-
-        log.info("==> Welcome to OrangeHRM Starter");
-        upgradeLocator.click();
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions()
-                .setName("Next")).click();
-        page.locator("i.oxd-icon.bi-check.oxd-checkbox-input-icon")
-                .click();  // NEED Continue Button
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions()
-                .setName("Continue")).click();
-        page.waitForLoadState(LoadState.DOMCONTENTLOADED);
-        page.waitForLoadState(LoadState.NETWORKIDLE);
-        page.waitForCondition(() -> {
-            return page.getByRole(AriaRole.TEXTBOX).first().isVisible();
-        });
-        if (!page.getByRole(AriaRole.HEADING).textContent().contains("Database Information".trim())) {
-            throw new IllegalStateException("Welcome to OrangeHRM Starter page failed");
-        }
-
-        // ENCRYPTION
-        log.info("==> ENCRYPTION");
-        page.getByRole(AriaRole.TEXTBOX).first().fill("orangehrm-db");
-        page.getByRole(AriaRole.TEXTBOX).nth(2).fill("orangehrm");
-        page.getByRole(AriaRole.TEXTBOX).nth(3).fill("orangeuser");
-        page.locator("input[type=\"password\"]").fill("orangepass");
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Next")).click();
-        page.waitForCondition(() -> {
-            var success = page.getByRole(AriaRole.HEADING).textContent().contains("System Check".trim());
-            if (success) {
-                log.info("==> System Check heading is ready");
-            }
-            return success;
-        });
-        if (!page.getByRole(AriaRole.HEADING).textContent().contains("System Check".trim())) {
-            throw new IllegalStateException("ENCRYPTION page failed");
-        }
-
-        // System Check
-        log.info("==> System Check");
-        waitForPageCondition(page, "Next", "==> Button next page System is ready");
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Next")).click();
-        if (!page.getByRole(AriaRole.HEADING).textContent().contains("Current Version Details")) {
-            throw new IllegalStateException("System Check page failed");
-        }
-
-        // Current Version Details
-        log.info("==> Current Version Details");
-        waitForPageCondition(page, "5.7", "==> Current OrangeHRM Version selection is ready");
-        if (!page.getByText("5.7", new Page.GetByTextOptions().setExact(true)).isVisible()) {
-            throw new IllegalStateException("Current Version Details page failed - Version 5.7 not found");
-        }
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Next")).click();
-
-        waitForPageCondition(page, "Upgrading OrangeHRM", "==> Upgrading OrangeHRM is ready");
-        if (!page.getByText("Upgrading OrangeHRM").isVisible()) {
-            throw new IllegalStateException("Current Version Details page failed");
-        }
-
-        // Upgrading OrangeHRM
-        log.info("==> Upgrading OrangeHRM");
-        waitForPageCondition(page, "Next", "==> 100% bar ready");
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Next")).click();
-        if (!page.getByRole(AriaRole.HEADING).textContent().contains("Upgrade Complete")) {
-            throw new IllegalStateException("Upgrading OrangeHRM page failed");
-        }
-
-        // Upgrade Complete
-        log.info("==> Upgrade Complete");
-        waitForPageCondition(page, "Launch OrangeHRM", "==> Launch OrangeHRM button is ready");
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions()
-                        .setName("Launch OrangeHRM"))
-                .click();
-        page.waitForCondition(() -> {
-            return page.locator("//img[@alt='company-branding']").isVisible();
-        });
-        page.waitForLoadState(LoadState.DOMCONTENTLOADED);
-        page.waitForLoadState(LoadState.NETWORKIDLE);
-        if (!page.locator("//img[@alt='company-branding']").isVisible()) {
-            throw new IllegalStateException("Upgrade Complete page failed");
-        }
-
-        log.info("OrangeHRM page is ready!!");
-    }
-
-    private void waitForPageCondition(Page page, String text, String message) {
-        page.waitForCondition(() -> {
-            var visible = page.getByText(text, new Page.GetByTextOptions().setExact(true)).isVisible();
-            if (visible) {
-                log.info(message);
-            }
-            return visible;
-        });
-    }
-
-    private void setDefaultTestUser() throws NullPointerException, IOException {
+   private void setDefaultTestUser() throws NullPointerException, IOException {
         InputStream is = getClass().getClassLoader().getResourceAsStream("config/test-users.json");
         ObjectMapper mapper = new ObjectMapper();
 
@@ -286,7 +172,7 @@ public class BaseTest {
         log.info("Default TestUser: '{}'", defaultTestUser.username);
     }
 
-    protected record TestUser(String username, String password) {
+    public record TestUser(String username, String password) {
 
     }
 }

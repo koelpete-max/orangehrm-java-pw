@@ -24,7 +24,7 @@ public interface TestComponent {
     DashboardPage dashboardPage();
     PimPage pimPage();
 
-    // „Panels“
+    // Panels
     SidePanel sidePanel();
     TopbarPanel topbarPanel();
 
