@@ -12,6 +12,7 @@ variables:
   DOCKER_TLS_CERTDIR: ""
   MAVEN_CLI_OPTS: "-B"
   BASE_URL: "http://docker:8080"
+  HEADLESS: "true"
 
 ui_tests:
   stage: test

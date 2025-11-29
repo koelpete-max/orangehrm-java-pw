@@ -62,7 +62,10 @@ public class BaseTest {
         extent = ExtentManager.getInstance();
 
         boolean headless = Boolean.parseBoolean(
-                System.getenv().getOrDefault("HEADLESS", "false")
+                System.getenv().getOrDefault(
+                        "HEADLESS",
+                        "false"
+                )
         );
         try (Playwright pw = Playwright.create()) {
             Browser tmpBrowser = pw.chromium().launch(
