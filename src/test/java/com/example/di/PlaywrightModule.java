@@ -1,5 +1,6 @@
 package com.example.di;
 
+import com.example.utils.EnvConfig;
 import com.microsoft.playwright.*;
 import dagger.Module;
 import dagger.Provides;
@@ -19,11 +20,11 @@ public class PlaywrightModule {
     @Provides
     @Singleton
     Browser provideBrowser(Playwright playwright) {
-        boolean headless = Boolean.parseBoolean(System.getenv().getOrDefault("HEADLESS", "false"));
+
         return playwright.chromium().launch(
                 new BrowserType.LaunchOptions()
                         .setArgs(Arrays.asList("--start-maximized"))
-                        .setHeadless(headless)
+                        .setHeadless(EnvConfig.HEADLESS)
         );
     }
 

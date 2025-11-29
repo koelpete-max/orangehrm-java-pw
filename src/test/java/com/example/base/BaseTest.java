@@ -64,7 +64,7 @@ public class BaseTest {
             Browser tmpBrowser = pw.chromium().launch(
                     new BrowserType.LaunchOptions()
                             .setArgs(Arrays.asList("--start-maximized"))
-                            .setHeadless(false)
+                            .setHeadless(EnvConfig.HEADLESS)
             );
             Page tmpPage = tmpBrowser.newPage();
 
