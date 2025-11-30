@@ -54,7 +54,13 @@ public class LoginPage {
     public boolean isInvalidCredentialsMessageVisible(double timeout) {
 
         page.setDefaultTimeout(timeout);
-        page.waitForCondition(() -> invalidCredentialsClassNameLocator.isVisible());
+        try {
+            page.waitForCondition(() -> invalidCredentialsClassNameLocator.isVisible());
+        }
+        catch (Exception e) {
+            log.warn("Invalid credentials message not visible within timeout of {} ms", timeout);
+        }
+
         boolean visible = invalidCredentialsClassNameLocator.isVisible();
         log.info("Checking if invalid credentials message is visible: {}", visible);
         page.setDefaultTimeout(defaultTimeout);

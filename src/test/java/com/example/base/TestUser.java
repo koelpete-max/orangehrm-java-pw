@@ -1,4 +1,4 @@
 package com.example.base;
 
-public record TestUser(String username, String password) {
+public record TestUser(String username, String password, String role) {
 }

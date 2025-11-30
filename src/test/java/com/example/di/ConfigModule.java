@@ -2,7 +2,7 @@ package com.example.di;
 
 import com.example.base.TestUser;
 import com.example.utils.EnvConfig;
-import com.example.utils.TestUserProvider;
+import com.example.testdata.TestUserProvider;
 import dagger.Module;
 import dagger.Provides;
 
@@ -22,6 +22,6 @@ public class ConfigModule {
     @Provides
     @Singleton
     TestUser provideDefaultTestUser()  {
-        return TestUserProvider.getDefaultUser();
+        return TestUserProvider.defaultAdmin();
     }
 }

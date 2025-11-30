@@ -1,10 +1,17 @@
 {
   "ADMIN": {
     "username": "Admin",
-    "password": "I$!mAD0ctor"
+    "password": "I$!mAD0ctor",
+    "role": "ADMIN"
   },
-  "HACKER": {
+  "Employee": {
+    "username": "schubol",
+    "password": "1t@intAPassword",
+    "role": "ESS"
+  },
+  "InvalidUser": {
     "username": "JohnDoe",
-    "password": "*******"
+    "password": "I@m@H@ck3r",
+    "role": "ESS"
   }
 }

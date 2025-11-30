@@ -13,6 +13,7 @@ import com.example.pages.main.TopbarPanel;
 import com.example.pages.main.admin.AdminPage;
 import com.example.pages.main.pim.PimPage;
 import com.example.reporting.TestLogger;
+import com.example.testdata.TestUserProvider;
 import com.example.utils.ScreenShotUtil;
 import com.example.utils.EnvConfig;
 import com.example.setup.OrangeHrmSetupWizard;
@@ -98,7 +99,7 @@ public class BaseTest {
         this.playwright = testContext.getPlaywright();
         this.browser = testContext.getBrowser();
         this.page = testContext.getPage();
-        this.defaultTestUser = testContext.getDefaultTestUser();
+        this.defaultTestUser = TestUserProvider.defaultAdmin();
 
         homePage = di.homePage();
         loginPage = di.loginPage();
@@ -116,7 +117,7 @@ public class BaseTest {
     }
 
     @AfterMethod
-    public void afterAnyTest(ITestResult result) {
+    public void tearDownTest(ITestResult result) {
 
         try {
             ReportManager.flush();
