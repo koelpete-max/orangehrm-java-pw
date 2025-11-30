@@ -35,7 +35,7 @@ public class LoginTest extends BaseTest {
     public void validCredentialsShouldGrantUserAccessToTheSystemTest(TestUser user) {
 
         final int timeout = 3000;
-        testLog.step("Checking login with valid credentials");
+        testLog.step("Checking login with valid credentials. Username: '" + user.username() + "'");
         loginPage.login(user.username(), user.password());
 
         testLog.step("Asserting that user is logged in");
