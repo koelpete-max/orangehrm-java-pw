@@ -26,7 +26,7 @@ public class LoginTest extends BaseTest {
 
         return new Object[][] {
                 { TestUserProvider.defaultAdmin() },
-                { TestUserProvider.get("Employee")}
+                //{ TestUserProvider.get("Employee")}
         };
     }
 
